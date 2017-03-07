@@ -10,6 +10,7 @@ var fiwareController = require('./ProxyModule/FiwareController');
 var oneM2MController = require('./ProxyModule/oneM2MController');
 
 var app = express();
+app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended:false}));
 
 global.fiwareService = '';
@@ -46,67 +47,52 @@ app.post('/FiwareNotificationEndpoint', function(request, response) {
 
 // Device information from MMG management system
 app.post('/MMGDeviceInfoEndpoint', function(request, response) {
-
-    fiwareController.QueryEntity(function (detailFiwareDeviceInfo) {
-
-    })
-
-    //register.fiwareDeviceRegistration();
-    /*
-    var selectedDevice = request.body['FiwareDevice'];
-
-    var deviceInfo = JSON.parse(selectedDevice)['deviceInfo'];
+    var selectedDevices = request.body['FiwareDevices']; // Root
+    var deviceInfo = selectedDevices.deviceInfo;
     var deviceCount = Object.keys(deviceInfo).length;
 
-    console.log(""+deviceCount);
-    response.status(200).send('Hello');
-    // var deviceKeyCount = Object.keys(deviceLists).length;
+    var fiwareDeviceInfo = new Entity( ); // Device information container
 
-    /*
-    for (var i = 0; i < deviceKeyCount; i++ ) {
-        var device = deviceInfo[Object.keys(deviceInfo)[i]];
-        entityNameArray[i] = device['entityName'];
-        entityTypeArray[i] = device['entityType'];
+    // get entity name and entity type for executing QueryEntity
+    for(var i = 0; i < deviceCount; i++) {
+        fiwareDeviceInfo.setEntityName(deviceInfo[Object.keys(deviceInfo)[i]].entityName);
+        fiwareDeviceInfo.setEntityType(deviceInfo[Object.keys(deviceInfo)[i]].entityType);
     }
 
-    // Starting registration
-    var fiwareDeviceInfo = new Entity( );
-    fiwareDeviceInfo.setEntityName(entityNameArray);
-    fiwareDeviceInfo.setEntityType(entityTypeArray);
-
-    // register.fiwareDeviceRegistration(fiwareInfo); */
+    fiwareController.executeQueryEntity(fiwareDeviceInfo, function (detailFiwareDeviceInfo) {
+        response.status(200).send('WISE-IoT');
+    });;
 });
 
 // Server testing code
 app.get('/', function (request, response) {
-    response.send('<h1>'+ 'Hello' + '</h1>');
+    response.send('<h1>'+ 'WISE-IoT' + '</h1>');
 });
 
+// Entity Container
 function Entity( ) {
-    this.entityName = [];
-    this.entityType = [];
+
+    // Pair Value
+    this.entityName = []; // Mandatory
+    this.entityType = []; // Mandatory
 
     this.setEntityName = function(entityName) {
-        this.entityName = entityName;
+        this.entityName.push(entityName);
     };
 
-    this.getEntityName = function( ) {
-        return this.entityName;
+    this.getEntityName = function(selectedIndex) {
+        return this.entityName[selectedIndex];
     };
 
     this.setEntityType = function (entityType) {
-        this.entityType = entityType;
+        this.entityType.push(entityType);
     };
 
-    this.getEntityType = function( ) {
-        return this.entityType;
+    this.getEntityType = function(selectedIndex) {
+        return this.entityType[selectedIndex];
     };
 
-    this.getEntityNameLength = function( ) {
+    this.getDeviceNumber = function ( ) {
         return this.entityName.length;
-    };
-
-    this.getEntityTypeLength = function( ) {
-        return this.entityType.length;
-    };
+    }
 }

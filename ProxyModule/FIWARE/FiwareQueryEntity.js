@@ -4,9 +4,12 @@
 
 var requestToAnotherServer = require('request');
 
-var getFiwareDevice = function (getFiwareCallback) {
+var getDeviceInfo = function (EntityName, EntityType, fiwareCallback) {
 
-    // Request for getting fiware device information from ContextBroker (Query Entity)
+    console.log(EntityName + " : " + EntityType);
+    fiwareCallback();
+
+    /*// Request for getting fiware device information from ContextBroker (Query Entity)
     requestToAnotherServer( { url :  'http://192.168.136.129:1026' + '/v2/entities/' + 'Room1' + '/' + 'attrs' + '?' + 'type=' + 'Room',
         method : 'GET',
         headers : {
@@ -23,11 +26,11 @@ var getFiwareDevice = function (getFiwareCallback) {
                     console.log(result[i]);
                 }
             }
-            getFiwareCallback(null, '하나', '둘');
+            fiwareCallback(null, '하나', '둘');
         }
-    });
+    });*/
 }
 
-exports.GetFiwareDeviceInfo = function(getFiwareCallback) {
-    getFiwareDevice(getFiwareCallback);
+exports.getFiwareDevice = function(EntityName, EntityType, fiwareCallback) {
+    getDeviceInfo(EntityName, EntityType, fiwareCallback);
 };

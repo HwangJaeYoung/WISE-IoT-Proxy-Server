@@ -7,30 +7,27 @@ var async = require('async');
 var requestToAnotherServer = require('request');
 var getFiwareDevice = require('./FIWARE/FiwareQueryEntity');
 
-var executeQueryEntity = function(fiwareCallback) {
+var iterationQueryEntity = function(fiwareDeviceInfo, fiwareControllerCallback) {
 
     var count = 0;
-    var deviceLists = 0;
-    var fiwareDevices = [];
+    var deviceLists = fiwareDeviceInfo.getDeviceNumber();
 
     async.whilst(
         function () { return count < deviceLists; },
 
         function (async_for_loop_callback) {
-            count++;
-            GetFiwareDeviceInfo.executeQueryEntity(function(responseObject) {
-                var resultObj = request.body;
-                var requestInfoObject = resultObj['requestInfo'];
-                fiwareDevices[count] = '';
+            getFiwareDevice.getFiwareDevice(fiwareDeviceInfo.entityName[count], fiwareDeviceInfo.entityType[count], function(responseObject) {
+                count++;
+                async_for_loop_callback(null, count);
             });
-            async_for_loop_callback(null, count);
         },
         function (err, n) {
-            fiwareCallback(fiwareDevices);
+            console.log("end");
+            //fiwareControllerCallback(fiwareDevices);
         }
     );
 };
 
-exports.QueryEntity = function(fiwareCallback) {
-    executeQueryEntity(fiwareCallback);
+exports.executeQueryEntity = function(fiwareDeviceInfo, fiwareControllerCallback) {
+    iterationQueryEntity(fiwareDeviceInfo, fiwareControllerCallback);
 };

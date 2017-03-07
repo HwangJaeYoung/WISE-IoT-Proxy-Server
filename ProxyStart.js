@@ -6,7 +6,8 @@
 var fs = require('fs');
 var express = require('express');
 var bodyParser = require('body-parser');
-var register = require('./ProxyModule/Registration');
+var fiwareController = require('./ProxyModule/FiwareController');
+var oneM2MController = require('./ProxyModule/oneM2MController');
 
 var app = express();
 app.use(bodyParser.urlencoded({extended:false}));
@@ -45,7 +46,12 @@ app.post('/FiwareNotificationEndpoint', function(request, response) {
 
 // Device information from MMG management system
 app.post('/MMGDeviceInfoEndpoint', function(request, response) {
-    register.fiwareDeviceRegistration();
+
+    fiwareController.QueryEntity(function (detailFiwareDeviceInfo) {
+
+    })
+
+    //register.fiwareDeviceRegistration();
     /*
     var selectedDevice = request.body['FiwareDevice'];
 

@@ -7,7 +7,7 @@ var async = require('async');
 var requestToAnotherServer = require('request');
 var getFiwareDevice = require('./FIWARE/FiwareQueryEntity');
 
-var registrationFiwareToOneM2M = function(fiwareInfo){
+var registrationFiwareToOneM2M = function(fiwareInformation){
 
     // var entityName = fiwareInfo.getEntityName( );
     // var entityType = fiwareInfo.getEntityType( );
@@ -51,6 +51,6 @@ var registrationFiwareToOneM2M = function(fiwareInfo){
     });
 };
 
-exports.fiwareDeviceRegistration = function(fiwareInfo) {
-    registrationFiwareToOneM2M(fiwareInfo);
+exports.fiwareDeviceRegistration = function(fiwareInformation) {
+    registrationFiwareToOneM2M(fiwareInformation);
 };

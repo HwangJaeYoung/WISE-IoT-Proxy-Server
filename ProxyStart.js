@@ -4,6 +4,7 @@
 
 // extract the modules
 var fs = require('fs');
+var async = require('async');
 var express = require('express');
 var bodyParser = require('body-parser');
 var fiwareController = require('./ProxyModule/FiwareController');
@@ -59,15 +60,23 @@ app.post('/MMGDeviceInfoEndpoint', function(request, response) {
         fiwareDeviceInfo.setEntityType(deviceInfo[Object.keys(deviceInfo)[i]].entityType);
     }
 
-    fiwareController.executeQueryEntity(fiwareDeviceInfo, function (detailFiwareDeviceInfo) {
-
-
-
-
-
-
+    async.waterfall([
+        // Get Fiware device information
+        function(callbackForoneM2M){
+            fiwareController.executeQueryEntity(fiwareDeviceInfo, function (detailFiwareDeviceInfo) {
+                callbackForoneM2M(null,detailFiwareDeviceInfo);
+            });
+        },
+        function(fiwareDevicesObject, callback){
+            oneM2MController.registrationFiwareToOneM2M(fiwareDevicesObject);
+        },
+        // Subscription Phase
+        function(arg1, callback){
+            callback(null, '끝');
+        }
+    ], function (err, result) {
         response.status(200).send('WISE-IoT');
-    });;
+    });
 });
 
 // Server testing code

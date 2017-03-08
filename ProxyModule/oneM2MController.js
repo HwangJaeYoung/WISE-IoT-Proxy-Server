@@ -4,45 +4,65 @@
 
 // extract the modules
 var async = require('async');
-var requestToAnotherServer = require('request');
-var getFiwareDevice = require('./FIWARE/FiwareQueryEntity');
+var AERegistration = require('./oneM2M/AERegistration');
 
-var registrationFiwareToOneM2M = function(fiwareInformation){
+var fiwareDeviceRegistration = function(fiwareInformation){
 
-    // var entityName = fiwareInfo.getEntityName( );
-    // var entityType = fiwareInfo.getEntityType( );
-
-    // AEName = entityName[AECount];
-    // AEType = entityType[AECount];
-
-    /*
     var count = 0;
-    var deviceLists = 3;
-
-    async.whilst(
-        function () { return count < deviceLists; },
-
-        function (async_for_loop_callback) {
-            count++;
-
-            async_for_loop_callback(null, count);
-        },
-        function (err, n) {
-
-        }
-    ); */
+    var selectedDevices = fiwareInformation['FiwareDevices']; // Root
+    var deviceInfo = selectedDevices.deviceInfo;
+    var deviceLists = Object.keys(deviceInfo).length;
 
     async.waterfall([
-        // Get Fiware device information
+
+        // AE registration
         function(fiwareCallback){
-            getFiwareDevice.GetFiwareDeviceInfo(fiwareCallback);
+            async.whilst(
+                function () { return count < deviceLists; },
+
+                function (async_for_loop_callback) {
+
+                    // Creating AE name using Entity Name and Entity Type.
+                    var AEName = deviceInfo[Object.keys(deviceInfo)[count]].entityName + ":" + deviceInfo[Object.keys(deviceInfo)[count]].entityType;
+                    AERegistration.AERegistrationExecution(AEName, function () {
+                        count++; async_for_loop_callback(null, count);
+                    });
+                },
+                function (err, n) {
+                    console.log("AE Regi End");
+
+                }
+            );
         },
+
+        // Container, contentInstance Registration
         function(arg1, arg2, callback){
 
+            count = 0;
+            async.whilst(
+                function () { return count < deviceLists; },
+
+                function (async_for_loop_callback) {
+
+                    var deviceObject = deviceInfo[Object.keys(deviceInfo)[count]];
+
+                    var device = Object.keys(deviceObject);
+
+                    // Creating AE name using Entity Name and Entity Type.
+                    var AEName = deviceInfo[Object.keys(deviceInfo)[count]].entityName + ":" + deviceInfo[Object.keys(deviceInfo)[count]].entityType;
+                    AERegistration.AERegistrationExecution(AEName, function () {
+                        count++; async_for_loop_callback(null, count);
+                    });
+                },
+                function (err, n) {
+                    console.log("AE Regi End");
+
+                }
+            );
             console.log("Testing : " + arg1 + arg2);
         },
 
-        // Subscription Phase
+        // Subscription Registration
         function(arg1, callback){
             callback(null, '끝');
         }
@@ -51,6 +71,6 @@ var registrationFiwareToOneM2M = function(fiwareInformation){
     });
 };
 
-exports.fiwareDeviceRegistration = function(fiwareInformation) {
-    registrationFiwareToOneM2M(fiwareInformation);
+exports.registrationFiwareToOneM2M = function(fiwareInformation) {
+    fiwareDeviceRegistration(fiwareInformation);
 };

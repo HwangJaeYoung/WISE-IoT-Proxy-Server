@@ -62,16 +62,19 @@ app.post('/MMGDeviceInfoEndpoint', function(request, response) {
 
     async.waterfall([
         // Get Fiware device information
-        function(callbackForoneM2M){
+        function(callbackForOneM2M){
             fiwareController.executeQueryEntity(fiwareDeviceInfo, function (detailFiwareDeviceInfo) {
-                callbackForoneM2M(null,detailFiwareDeviceInfo);
+                callbackForOneM2M(null,detailFiwareDeviceInfo);
             });
         },
-        function(fiwareDevicesObject, callback){
-            oneM2MController.registrationFiwareToOneM2M(fiwareDevicesObject);
+        // oneM2M Registration callback
+        function(fiwareDeviceObjects, callbackAboutAERegistration){
+            oneM2MController.registrationFiwareToOneM2M(fiwareDeviceObjects, function () {
+                callbackAboutAERegistration(null, fiwareDeviceObjects);
+            });
         },
         // Subscription Phase
-        function(arg1, callback){
+        function(fiwareDevicesObject, callback){
             callback(null, '끝');
         }
     ], function (err, result) {
@@ -86,7 +89,6 @@ app.get('/', function (request, response) {
 
 // Entity Container
 function Entity( ) {
-
     // Pair Value
     this.entityName = []; // Mandatory field
     this.entityType = []; // Mandatory field

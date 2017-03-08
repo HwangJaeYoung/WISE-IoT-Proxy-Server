@@ -24,6 +24,6 @@ var RegistrationExecution = function (AEName, callBackForResponse) {
     });
 };
 
-exports.AERegistrationExecution = function(AEName, callBackForResponse) {
-    RegistrationExecution(AEName, callBackForResponse);
+exports.ConCinRegistration = function(getFiwareCallback) {
+    containerRegistrationExecution(getFiwareCallback);
 };

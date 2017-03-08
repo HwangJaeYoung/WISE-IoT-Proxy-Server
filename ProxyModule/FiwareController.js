@@ -8,10 +8,10 @@ var requestToAnotherServer = require('request');
 var getFiwareDevice = require('./FIWARE/FiwareQueryEntity');
 
 var iterationQueryEntity = function(fiwareDeviceInfo, fiwareControllerCallback) {
-
     var count = 0;
     var deviceLists = fiwareDeviceInfo.getDeviceNumber();
 
+    // JSON Structure for presenting FIWARE devices
     var deviceObjectRoot = new Object();
     var fiwareDevicesObject = new Object();
     var fiwareDeviceInfoObject = new Object();
@@ -26,8 +26,8 @@ var iterationQueryEntity = function(fiwareDeviceInfo, fiwareControllerCallback) 
                 var deviceName = "device" + (count + 1);
                 deviceObjectRoot[deviceName] = responseObject;
 
-                count++;
-                async_for_loop_callback(null, count);
+                // Checking for iteration
+                count++; async_for_loop_callback(null, count);
             });
         },
         function (err, n) {

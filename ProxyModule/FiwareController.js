@@ -37,7 +37,7 @@ var iterationQueryEntity = function(fiwareDeviceInfo, fiwareControllerCallback) 
             fiwareDeviceInfoObject.deviceInfo = deviceObjectRoot;
             fiwareDevicesObject.FiwareDevices = fiwareDeviceInfoObject;
 
-            console.log(fiwareDevicesObject);
+            console.log(JSON.stringify(fiwareDevicesObject));
             console.log("end");
             //fiwareControllerCallback(fiwareDevices);
         }

@@ -19,16 +19,20 @@ var getDeviceInfo = function (EntityName, EntityType, fiwareCallback) {
             if (fiwareResponse.statusCode == 200) {
 
                 var deviceAttrData = JSON.parse(fiwareResponse.body);
-                var result = Object.keys(deviceAttrData);
+                var attrResult = Object.keys(deviceAttrData);
 
+                // Adding fiware mandatory information
                 var resultObject = new Object();
                 resultObject.entityName = EntityName;
                 resultObject.entityType = EntityType;
 
-                
-
-
-                fiwareCallback(result); // Callback method for sending QueryEntity result to FiwareController
+                // Adding fiware device parameters respectively
+                for(var i = 0; i < attrResult.length; i++) {
+                    var valueObject = new Object();
+                    valueObject.value =  deviceAttrData[attrResult[i]].value;
+                    resultObject[attrResult[i]] = valueObject;
+                }
+                fiwareCallback(resultObject); // Callback method for sending QueryEntity result to FiwareController
             }
         }
     });

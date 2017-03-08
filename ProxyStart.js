@@ -60,6 +60,12 @@ app.post('/MMGDeviceInfoEndpoint', function(request, response) {
     }
 
     fiwareController.executeQueryEntity(fiwareDeviceInfo, function (detailFiwareDeviceInfo) {
+
+
+
+
+
+
         response.status(200).send('WISE-IoT');
     });;
 });

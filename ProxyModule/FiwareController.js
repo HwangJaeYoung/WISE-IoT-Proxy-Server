@@ -12,19 +12,32 @@ var iterationQueryEntity = function(fiwareDeviceInfo, fiwareControllerCallback) 
     var count = 0;
     var deviceLists = fiwareDeviceInfo.getDeviceNumber();
 
+    var fiwareDevicesObject = new Object();
+
+    var deviceObjectRoot = new Object();
+    var fiwareDeviceInfoObject = new Object();
+
     async.whilst(
         function () { return count < deviceLists; },
 
         function (async_for_loop_callback) {
             getFiwareDevice.getFiwareDevice(fiwareDeviceInfo.entityName[count], fiwareDeviceInfo.entityType[count], function(responseObject) {
+
+                var deviceName = "device" + (count + 1);
+
+                // Device
+                deviceObjectRoot[deviceName] = responseObject;
+
                 count++;
-
-                console.log(responseObject);
-
                 async_for_loop_callback(null, count);
             });
         },
         function (err, n) {
+
+            fiwareDeviceInfoObject.deviceInfo = deviceObjectRoot;
+            fiwareDevicesObject.FiwareDevices = fiwareDeviceInfoObject;
+
+            console.log(fiwareDevicesObject);
             console.log("end");
             //fiwareControllerCallback(fiwareDevices);
         }

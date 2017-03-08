@@ -20,6 +20,14 @@ var getDeviceInfo = function (EntityName, EntityType, fiwareCallback) {
 
                 var deviceAttrData = JSON.parse(fiwareResponse.body);
                 var result = Object.keys(deviceAttrData);
+
+                var resultObject = new Object();
+                resultObject.entityName = EntityName;
+                resultObject.entityType = EntityType;
+
+                
+
+
                 fiwareCallback(result); // Callback method for sending QueryEntity result to FiwareController
             }
         }

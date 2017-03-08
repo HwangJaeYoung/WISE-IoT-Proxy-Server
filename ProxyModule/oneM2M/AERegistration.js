@@ -3,6 +3,7 @@
  */
 
 var requestToAnotherServer = require('request');
+var bodyGenerator = require('../Domain/BodyGenerator');
 
 var RegistrationExecution = function (AEName, callBackForResponse) {
 
@@ -13,12 +14,10 @@ var RegistrationExecution = function (AEName, callBackForResponse) {
         headers: { // Basic AE resource structure for registration
             'Accept': 'application/json',
             'X-M2M-RI': '12345',
-            'X-M2M-Origin': 'Origin',
+            'X-M2M-Origin': 'C',
             'Content-Type': 'application/vnd.onem2m-res+json; ty=2',
         },
-        body: { // NGSI10에 따른 payload이 구성이다.(queryContext)
-            'App-ID': "0.2.481.2.0001.001.000111"
-        }
+        body: bodyGenerator.AEBodyGenerator(AEName)
     }, function (error, AECreateResponse, body) {
         callBackForResponse();
     });

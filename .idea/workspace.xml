@@ -2,14 +2,13 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="48109795-c062-408c-aa7a-924255aa25e7" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ProxyModule/oneM2M/ContainerRegistration.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ProxyModule/oneM2M/contentInsatnceRegistration.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ProxyModule/oneM2M/oneM2MDeviceUpdate.js" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/ProxyModule/oneM2M/ConCinRegistration.js" afterPath="" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ProxyModule/Domain/BodyGenerator.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/ProxyModule/FiwareController.js" afterPath="$PROJECT_DIR$/ProxyModule/FiwareController.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/ProxyModule/FIWARE/FiwareQueryEntity.js" afterPath="$PROJECT_DIR$/ProxyModule/FIWARE/FiwareQueryEntity.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/ProxyModule/oneM2M/AERegistration.js" afterPath="$PROJECT_DIR$/ProxyModule/oneM2M/AERegistration.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/ProxyModule/oneM2M/SubscriptionRegistration.js" afterPath="$PROJECT_DIR$/ProxyModule/oneM2M/SubscriptionRegistration.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/ProxyModule/oneM2M/ContainerRegistration.js" afterPath="$PROJECT_DIR$/ProxyModule/oneM2M/ContainerRegistration.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/ProxyModule/oneM2M/contentInsatnceRegistration.js" afterPath="$PROJECT_DIR$/ProxyModule/oneM2M/contentInsatnceRegistration.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/ProxyModule/oneM2M/oneM2MDeviceUpdate.js" afterPath="$PROJECT_DIR$/ProxyModule/oneM2M/oneM2MDeviceUpdate.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/ProxyModule/oneM2MController.js" afterPath="$PROJECT_DIR$/ProxyModule/oneM2MController.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/ProxyStart.js" afterPath="$PROJECT_DIR$/ProxyStart.js" />
     </list>
@@ -29,11 +28,23 @@
   <component name="ExecutionTargetManager" SELECTED_TARGET="default_target" />
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="450">
-      <file leaf-file-name="ProxyStart.js" pinned="false" current-in-tab="false">
+      <file leaf-file-name="ProxyStart.js" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/ProxyStart.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1558">
-              <caret line="108" column="46" lean-forward="true" selection-start-line="108" selection-start-column="46" selection-end-line="108" selection-end-column="46" />
+            <state relative-caret-position="280">
+              <caret line="57" column="48" lean-forward="true" selection-start-line="57" selection-start-column="48" selection-end-line="57" selection-end-column="48" />
+              <folding>
+                <element signature="e#0#50#0" expanded="false" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="contentInsatnceRegistration.js" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/ProxyModule/oneM2M/contentInsatnceRegistration.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="370">
+              <caret line="28" column="0" lean-forward="false" selection-start-line="28" selection-start-column="0" selection-end-line="30" selection-end-column="2" />
               <folding>
                 <element signature="e#0#50#0" expanded="false" />
               </folding>
@@ -44,8 +55,8 @@
       <file leaf-file-name="oneM2MController.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/ProxyModule/oneM2MController.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="336">
-              <caret line="53" column="70" lean-forward="true" selection-start-line="53" selection-start-column="70" selection-end-line="53" selection-end-column="70" />
+            <state relative-caret-position="1876">
+              <caret line="69" column="9" lean-forward="true" selection-start-line="69" selection-start-column="9" selection-end-line="69" selection-end-column="9" />
               <folding>
                 <element signature="e#0#50#0" expanded="false" />
               </folding>
@@ -53,21 +64,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="contentInsatnceRegistration.js" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/ProxyModule/oneM2M/contentInsatnceRegistration.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="0">
-              <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
       <file leaf-file-name="FiwareController.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/ProxyModule/FiwareController.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="354">
-              <caret line="24" column="22" lean-forward="false" selection-start-line="24" selection-start-column="22" selection-end-line="24" selection-end-column="22" />
+            <state relative-caret-position="672">
+              <caret line="26" column="28" lean-forward="false" selection-start-line="26" selection-start-column="28" selection-end-line="26" selection-end-column="28" />
               <folding>
                 <element signature="e#0#50#0" expanded="false" />
               </folding>
@@ -78,8 +79,8 @@
       <file leaf-file-name="oneM2MDeviceUpdate.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/ProxyModule/oneM2M/oneM2MDeviceUpdate.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="0">
-              <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+            <state relative-caret-position="56">
+              <caret line="4" column="0" lean-forward="true" selection-start-line="4" selection-start-column="0" selection-end-line="4" selection-end-column="0" />
               <folding />
             </state>
           </provider>
@@ -88,8 +89,8 @@
       <file leaf-file-name="SubscriptionRegistration.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/ProxyModule/oneM2M/SubscriptionRegistration.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="364">
-              <caret line="15" column="9" lean-forward="true" selection-start-line="15" selection-start-column="9" selection-end-line="15" selection-end-column="9" />
+            <state relative-caret-position="449">
+              <caret line="42" column="2" lean-forward="true" selection-start-line="42" selection-start-column="2" selection-end-line="42" selection-end-column="2" />
               <folding>
                 <element signature="e#0#50#0" expanded="false" />
               </folding>
@@ -100,8 +101,8 @@
       <file leaf-file-name="FiwareQueryEntity.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/ProxyModule/FIWARE/FiwareQueryEntity.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="784">
-              <caret line="30" column="51" lean-forward="true" selection-start-line="30" selection-start-column="51" selection-end-line="30" selection-end-column="51" />
+            <state relative-caret-position="1008">
+              <caret line="38" column="2" lean-forward="false" selection-start-line="38" selection-start-column="2" selection-end-line="38" selection-end-column="2" />
               <folding>
                 <element signature="e#0#50#0" expanded="false" />
               </folding>
@@ -112,8 +113,8 @@
       <file leaf-file-name="ContainerRegistration.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/ProxyModule/oneM2M/ContainerRegistration.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="616">
-              <caret line="24" column="2" lean-forward="false" selection-start-line="24" selection-start-column="2" selection-end-line="24" selection-end-column="2" />
+            <state relative-caret-position="336">
+              <caret line="14" column="2" lean-forward="false" selection-start-line="14" selection-start-column="2" selection-end-line="14" selection-end-column="2" />
               <folding>
                 <element signature="e#0#50#0" expanded="false" />
               </folding>
@@ -124,8 +125,8 @@
       <file leaf-file-name="AERegistration.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/ProxyModule/oneM2M/AERegistration.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="336">
-              <caret line="14" column="32" lean-forward="true" selection-start-line="14" selection-start-column="32" selection-end-line="14" selection-end-column="32" />
+            <state relative-caret-position="84">
+              <caret line="5" column="0" lean-forward="false" selection-start-line="5" selection-start-column="0" selection-end-line="5" selection-end-column="55" />
               <folding>
                 <element signature="e#0#50#0" expanded="false" />
               </folding>
@@ -133,12 +134,14 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="conf.json" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/conf.json">
+      <file leaf-file-name="BodyGenerator.js" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/ProxyModule/Domain/BodyGenerator.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="140">
-              <caret line="5" column="24" lean-forward="true" selection-start-line="5" selection-start-column="24" selection-end-line="5" selection-end-column="51" />
-              <folding />
+            <state relative-caret-position="336">
+              <caret line="14" column="43" lean-forward="true" selection-start-line="14" selection-start-column="43" selection-end-line="14" selection-end-column="43" />
+              <folding>
+                <element signature="e#0#50#0" expanded="false" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -167,20 +170,21 @@
         <option value="$PROJECT_DIR$/conf.js" />
         <option value="$PROJECT_DIR$/package.json" />
         <option value="$PROJECT_DIR$/ProxyModule/oneM2M/contentInstanceRegistration.js" />
-        <option value="$PROJECT_DIR$/ProxyModule/oneM2M/ContainerRegistration.js" />
         <option value="$PROJECT_DIR$/ProxyModule/FIWARE/GetFiwareDevice.js" />
         <option value="$PROJECT_DIR$/ProxyModule/Registration.js" />
         <option value="$PROJECT_DIR$/FiwareController.js" />
-        <option value="$PROJECT_DIR$/ProxyModule/FIWARE/FiwareQueryEntity.js" />
         <option value="$PROJECT_DIR$/ProxyModule/FiwareController.js" />
-        <option value="$PROJECT_DIR$/ProxyStart.js" />
         <option value="$PROJECT_DIR$/conf.json" />
-        <option value="$PROJECT_DIR$/ProxyModule/oneM2M/oneM2MDeviceUpdate.js" />
-        <option value="$PROJECT_DIR$/ProxyModule/oneM2M/AERegistration.js" />
         <option value="$PROJECT_DIR$/ProxyModule/oneM2M/SubscriptionRegistration.js" />
-        <option value="$PROJECT_DIR$/ProxyModule/oneM2MController.js" />
         <option value="$PROJECT_DIR$/ProxyModule/oneM2M/ConCinRegistration.js" />
+        <option value="$PROJECT_DIR$/ProxyModule/oneM2MController.js" />
+        <option value="$PROJECT_DIR$/ProxyModule/oneM2M/ContainerRegistration.js" />
         <option value="$PROJECT_DIR$/ProxyModule/oneM2M/contentInsatnceRegistration.js" />
+        <option value="$PROJECT_DIR$/ProxyModule/oneM2M/oneM2MDeviceUpdate.js" />
+        <option value="$PROJECT_DIR$/ProxyModule/FIWARE/FiwareQueryEntity.js" />
+        <option value="$PROJECT_DIR$/ProxyModule/oneM2M/AERegistration.js" />
+        <option value="$PROJECT_DIR$/ProxyStart.js" />
+        <option value="$PROJECT_DIR$/ProxyModule/Domain/BodyGenerator.js" />
       </list>
     </option>
   </component>
@@ -275,6 +279,24 @@
             </PATH_ELEMENT>
             <PATH_ELEMENT>
               <option name="myItemId" value="FIWARE" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="WISE IoT Proxy" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="WISE IoT Proxy" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="ProxyModule" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Domain" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -408,22 +430,22 @@
       <workItem from="1488869708948" duration="139000" />
       <workItem from="1488880467178" duration="9493000" />
       <workItem from="1488936767956" duration="3130000" />
-      <workItem from="1488939915780" duration="12584000" />
+      <workItem from="1488939915780" duration="21631000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="55367000" />
+    <option name="totallyTimeSpent" value="64414000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-11" y="-11" width="1942" height="1042" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.16041666" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.2125" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.23401827" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.27968037" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
@@ -450,16 +472,6 @@
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/ProxyModule/oneM2M/SubscriptionRegistration.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="28">
-          <caret line="3" column="0" lean-forward="true" selection-start-line="3" selection-start-column="0" selection-end-line="3" selection-end-column="0" />
-          <folding>
-            <element signature="e#0#50#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/conf.json">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="252">
@@ -797,34 +809,34 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/package.json">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="448">
-          <caret line="16" column="24" lean-forward="true" selection-start-line="16" selection-start-column="24" selection-end-line="16" selection-end-column="24" />
+        <state relative-caret-position="162">
+          <caret line="15" column="9" lean-forward="true" selection-start-line="15" selection-start-column="9" selection-end-line="15" selection-end-column="9" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/conf.json">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="140">
-          <caret line="5" column="24" lean-forward="true" selection-start-line="5" selection-start-column="24" selection-end-line="5" selection-end-column="51" />
+        <state relative-caret-position="252">
+          <caret line="9" column="1" lean-forward="true" selection-start-line="9" selection-start-column="1" selection-end-line="9" selection-end-column="1" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/ProxyModule/FIWARE/FiwareQueryEntity.js">
+    <entry file="file://$PROJECT_DIR$/ProxyModule/oneM2M/contentInsatnceRegistration.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="784">
-          <caret line="30" column="51" lean-forward="true" selection-start-line="30" selection-start-column="51" selection-end-line="30" selection-end-column="51" />
+        <state relative-caret-position="370">
+          <caret line="28" column="0" lean-forward="false" selection-start-line="28" selection-start-column="0" selection-end-line="30" selection-end-column="2" />
           <folding>
             <element signature="e#0#50#0" expanded="false" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/ProxyStart.js">
+    <entry file="file://$PROJECT_DIR$/ProxyModule/oneM2M/SubscriptionRegistration.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1558">
-          <caret line="108" column="46" lean-forward="true" selection-start-line="108" selection-start-column="46" selection-end-line="108" selection-end-column="46" />
+        <state relative-caret-position="449">
+          <caret line="42" column="2" lean-forward="true" selection-start-line="42" selection-start-column="2" selection-end-line="42" selection-end-column="2" />
           <folding>
             <element signature="e#0#50#0" expanded="false" />
           </folding>
@@ -833,26 +845,16 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/ProxyModule/oneM2M/oneM2MDeviceUpdate.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        <state relative-caret-position="56">
+          <caret line="4" column="0" lean-forward="true" selection-start-line="4" selection-start-column="0" selection-end-line="4" selection-end-column="0" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/ProxyModule/oneM2M/SubscriptionRegistration.js">
+    <entry file="file://$PROJECT_DIR$/ProxyModule/FIWARE/FiwareQueryEntity.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="364">
-          <caret line="15" column="9" lean-forward="true" selection-start-line="15" selection-start-column="9" selection-end-line="15" selection-end-column="9" />
-          <folding>
-            <element signature="e#0#50#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/ProxyModule/oneM2M/AERegistration.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="336">
-          <caret line="14" column="32" lean-forward="true" selection-start-line="14" selection-start-column="32" selection-end-line="14" selection-end-column="32" />
+        <state relative-caret-position="1008">
+          <caret line="38" column="2" lean-forward="false" selection-start-line="38" selection-start-column="2" selection-end-line="38" selection-end-column="2" />
           <folding>
             <element signature="e#0#50#0" expanded="false" />
           </folding>
@@ -861,8 +863,18 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/ProxyModule/oneM2M/ContainerRegistration.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="616">
-          <caret line="24" column="2" lean-forward="false" selection-start-line="24" selection-start-column="2" selection-end-line="24" selection-end-column="2" />
+        <state relative-caret-position="336">
+          <caret line="14" column="2" lean-forward="false" selection-start-line="14" selection-start-column="2" selection-end-line="14" selection-end-column="2" />
+          <folding>
+            <element signature="e#0#50#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ProxyModule/oneM2M/AERegistration.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="84">
+          <caret line="5" column="0" lean-forward="false" selection-start-line="5" selection-start-column="0" selection-end-line="5" selection-end-column="55" />
           <folding>
             <element signature="e#0#50#0" expanded="false" />
           </folding>
@@ -871,8 +883,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/ProxyModule/FiwareController.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="354">
-          <caret line="24" column="22" lean-forward="false" selection-start-line="24" selection-start-column="22" selection-end-line="24" selection-end-column="22" />
+        <state relative-caret-position="672">
+          <caret line="26" column="28" lean-forward="false" selection-start-line="26" selection-start-column="28" selection-end-line="26" selection-end-column="28" />
           <folding>
             <element signature="e#0#50#0" expanded="false" />
           </folding>
@@ -881,19 +893,31 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/ProxyModule/oneM2MController.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="336">
-          <caret line="53" column="70" lean-forward="true" selection-start-line="53" selection-start-column="70" selection-end-line="53" selection-end-column="70" />
+        <state relative-caret-position="1876">
+          <caret line="69" column="9" lean-forward="true" selection-start-line="69" selection-start-column="9" selection-end-line="69" selection-end-column="9" />
           <folding>
             <element signature="e#0#50#0" expanded="false" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/ProxyModule/oneM2M/contentInsatnceRegistration.js">
+    <entry file="file://$PROJECT_DIR$/ProxyModule/Domain/BodyGenerator.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
+        <state relative-caret-position="336">
+          <caret line="14" column="43" lean-forward="true" selection-start-line="14" selection-start-column="43" selection-end-line="14" selection-end-column="43" />
+          <folding>
+            <element signature="e#0#50#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ProxyStart.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="280">
+          <caret line="57" column="48" lean-forward="true" selection-start-line="57" selection-start-column="48" selection-end-line="57" selection-end-column="48" />
+          <folding>
+            <element signature="e#0#50#0" expanded="false" />
+          </folding>
         </state>
       </provider>
     </entry>

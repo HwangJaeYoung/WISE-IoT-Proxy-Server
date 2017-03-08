@@ -36,7 +36,7 @@ var getDeviceInfo = function (EntityName, EntityType, fiwareCallback) {
             }
         }
     });
-}
+};
 
 exports.getFiwareDevice = function(EntityName, EntityType, fiwareCallback) {
     getDeviceInfo(EntityName, EntityType, fiwareCallback);

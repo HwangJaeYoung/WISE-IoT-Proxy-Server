@@ -10,6 +10,8 @@ var bodyParser = require('body-parser');
 var fiwareController = require('./ProxyModule/FiwareController');
 var oneM2MController = require('./ProxyModule/oneM2MController');
 
+var bodyGenerator = require('./ProxyModule/Domain/BodyGenerator');
+
 var app = express();
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended:false}));
@@ -48,7 +50,11 @@ app.post('/FiwareNotificationEndpoint', function(request, response) {
 
 // Device information from MMG management system
 app.post('/MMGDeviceInfoEndpoint', function(request, response) {
-    var selectedDevices = request.body['FiwareDevices']; // Root
+
+    var aa = bodyGenerator.AEBodyGenerator("TesingAE");
+    console.log(aa);
+
+    /*var selectedDevices = request.body['FiwareDevices']; // Root
     var deviceInfo = selectedDevices.deviceInfo;
     var deviceCount = Object.keys(deviceInfo).length;
 
@@ -64,7 +70,7 @@ app.post('/MMGDeviceInfoEndpoint', function(request, response) {
         // Get Fiware device information
         function(callbackForOneM2M){
             fiwareController.executeQueryEntity(fiwareDeviceInfo, function (detailFiwareDeviceInfo) {
-                callbackForOneM2M(null,detailFiwareDeviceInfo);
+                callbackForOneM2M(null, detailFiwareDeviceInfo);
             });
         },
         // oneM2M Registration callback
@@ -73,13 +79,9 @@ app.post('/MMGDeviceInfoEndpoint', function(request, response) {
                 callbackAboutAERegistration(null, fiwareDeviceObjects);
             });
         },
-        // Subscription Phase
-        function(fiwareDevicesObject, callback){
-            callback(null, '끝');
-        }
     ], function (err, result) {
         response.status(200).send('WISE-IoT');
-    });
+    });*/
 });
 
 // Server testing code

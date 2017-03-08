@@ -5,6 +5,7 @@
 // extract the modules
 var async = require('async');
 var AERegistration = require('./oneM2M/AERegistration');
+var containerRegistration = require('./oneM2M/ContainerRegistration');
 
 var fiwareDeviceRegistration = function(fiwareInformation){
 
@@ -16,7 +17,7 @@ var fiwareDeviceRegistration = function(fiwareInformation){
     async.waterfall([
 
         // AE registration
-        function(fiwareCallback){
+        function(aeRegistrationCallback){
             async.whilst(
                 function () { return count < deviceLists; },
 
@@ -29,37 +30,38 @@ var fiwareDeviceRegistration = function(fiwareInformation){
                     });
                 },
                 function (err, n) {
-                    console.log("AE Regi End");
-
+                    if(err) {
+                        console.log(err);
+                    } else {
+                        aeRegistrationCallback(null);
+                    }
                 }
             );
         },
 
         // Container, contentInstance Registration
-        function(arg1, arg2, callback){
+        function(containerRegistrationCallback){
 
-            count = 0;
+            count = 0; // Initialization for counting
             async.whilst(
                 function () { return count < deviceLists; },
 
                 function (async_for_loop_callback) {
 
-                    var deviceObject = deviceInfo[Object.keys(deviceInfo)[count]];
-
-                    var device = Object.keys(deviceObject);
-
                     // Creating AE name using Entity Name and Entity Type.
                     var AEName = deviceInfo[Object.keys(deviceInfo)[count]].entityName + ":" + deviceInfo[Object.keys(deviceInfo)[count]].entityType;
-                    AERegistration.AERegistrationExecution(AEName, function () {
+                    containerRegistration.ContainerRegistrationExecution(AEName, deviceInfo[Object.keys(deviceInfo)[count]], function () {
                         count++; async_for_loop_callback(null, count);
                     });
                 },
                 function (err, n) {
-                    console.log("AE Regi End");
-
+                    if(err) {
+                        console.log(err);
+                    } else {
+                        containerRegistrationCallback(null);
+                    }
                 }
             );
-            console.log("Testing : " + arg1 + arg2);
         },
 
         // Subscription Registration

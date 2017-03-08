@@ -73,8 +73,8 @@ app.get('/', function (request, response) {
 function Entity( ) {
 
     // Pair Value
-    this.entityName = []; // Mandatory
-    this.entityType = []; // Mandatory
+    this.entityName = []; // Mandatory field
+    this.entityType = []; // Mandatory field
 
     this.setEntityName = function(entityName) {
         this.entityName.push(entityName);

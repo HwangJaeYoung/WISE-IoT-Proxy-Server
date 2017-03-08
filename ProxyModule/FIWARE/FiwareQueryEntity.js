@@ -6,29 +6,24 @@ var requestToAnotherServer = require('request');
 
 var getDeviceInfo = function (EntityName, EntityType, fiwareCallback) {
 
-    console.log(EntityName + " : " + EntityType);
-    fiwareCallback();
+    var targetURL = fiwareIP + '/v2/entities/' + EntityName + '/' + 'attrs' + '?' + 'type=' + EntityType;
 
-    /*// Request for getting fiware device information from ContextBroker (Query Entity)
-    requestToAnotherServer( { url :  'http://192.168.136.129:1026' + '/v2/entities/' + 'Room1' + '/' + 'attrs' + '?' + 'type=' + 'Room',
+    // Request for getting fiware device information from ContextBroker (Query Entity)
+    requestToAnotherServer( { url : targetURL,
         method : 'GET',
         headers : {
             'Accept' : 'application/json',
         }
     }, function (error, fiwareResponse, body) {
-        if(typeof(fiwareResponse) !== 'undefined') { // fiware에서 응답이 왔을 경우에는 다음을 수행한다.
+        if(typeof(fiwareResponse) !== 'undefined') {
             if (fiwareResponse.statusCode == 200) {
 
                 var deviceAttrData = JSON.parse(fiwareResponse.body);
                 var result = Object.keys(deviceAttrData);
-
-                for (var i = 0; i < result.length; i++) {
-                    console.log(result[i]);
-                }
+                fiwareCallback(result); // Callback method for sending QueryEntity result to FiwareController
             }
-            fiwareCallback(null, '하나', '둘');
         }
-    });*/
+    });
 }
 
 exports.getFiwareDevice = function(EntityName, EntityType, fiwareCallback) {

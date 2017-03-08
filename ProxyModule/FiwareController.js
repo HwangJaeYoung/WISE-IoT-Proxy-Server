@@ -18,6 +18,9 @@ var iterationQueryEntity = function(fiwareDeviceInfo, fiwareControllerCallback) 
         function (async_for_loop_callback) {
             getFiwareDevice.getFiwareDevice(fiwareDeviceInfo.entityName[count], fiwareDeviceInfo.entityType[count], function(responseObject) {
                 count++;
+
+                console.log(responseObject);
+
                 async_for_loop_callback(null, count);
             });
         },

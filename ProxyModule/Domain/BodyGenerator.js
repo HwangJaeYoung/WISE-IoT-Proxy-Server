@@ -7,13 +7,12 @@ var AEBodyGeneration = function (AEName) {
 
     var rootForAttr = new Object();
     rootForAttr['api'] = "0.2.481.2.0001.001.000111";
-    rootForAttr['rr'] = AEName;
-    rootForAttr['rn'] = "true";
+    rootForAttr['rr'] = "true";
+    rootForAttr['rn'] = AEName;
 
     bodyObject['m2m:ae'] = rootForAttr;
 
-    var test =  JSON.stringify(bodyObject);
-    return test;
+    return JSON.stringify(bodyObject);
 };
 
 var ContainerBodyGeneration = function (AEName, callBackForResponse) {
@@ -25,7 +24,7 @@ var contentInstanceBodyGeneration = function (AEName, callBackForResponse) {
 };
 
 exports.AEBodyGenerator = function(AEName) {
-    AEBodyGeneration(AEName);
+    return AEBodyGeneration(AEName);
 };
 
 exports.ContainerBodyGenerator = function(AEName, containerName, contentInstanceValue, callBackForResponse) {

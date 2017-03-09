@@ -33,7 +33,8 @@ var fiwareDeviceRegistration = function(fiwareInformation){
                     if(err) {
                         console.log(err);
                     } else {
-                        aeRegistrationCallback(null);
+                        console.log("in");
+                        // aeRegistrationCallback(null);
                     }
                 }
             );

@@ -16,8 +16,8 @@ var getDeviceInfo = function (EntityName, EntityType, fiwareCallback) {
         }
     }, function (error, fiwareResponse, body) {
         if(typeof(fiwareResponse) !== 'undefined') {
-            if (fiwareResponse.statusCode == 200) {
 
+            if (fiwareResponse.statusCode == 200) {
                 var deviceAttrData = JSON.parse(fiwareResponse.body);
                 var attrResult = Object.keys(deviceAttrData);
 

@@ -9,28 +9,46 @@ var AEBodyGeneration = function (AEName) {
     rootForAttr['api'] = "0.2.481.2.0001.001.000111";
     rootForAttr['rr'] = "true";
     rootForAttr['rn'] = AEName;
-
     bodyObject['m2m:ae'] = rootForAttr;
 
-    return JSON.stringify(bodyObject);
+    return bodyObject;
 };
 
-var ContainerBodyGeneration = function (AEName, callBackForResponse) {
+var ContainerBodyGeneration = function (ContainerName) {
+    var bodyObject = new Object();
 
+    var rootForAttr = new Object();
+    rootForAttr['rn'] = ContainerName;
+    bodyObject['m2m:cnt'] = rootForAttr;
+
+    return bodyObject;
 };
 
-var contentInstanceBodyGeneration = function (AEName, callBackForResponse) {
+var contentInstanceBodyGeneration = function (contentInstanceName) {
+    var bodyObject = new Object();
 
+    var rootForAttr = new Object();
+    rootForAttr['con'] = contentInstanceName;
+    bodyObject['m2m:cin'] = rootForAttr;
+
+    return bodyObject;
 };
 
+// oneM2M Body Generator
 exports.AEBodyGenerator = function(AEName) {
     return AEBodyGeneration(AEName);
 };
 
-exports.ContainerBodyGenerator = function(AEName, containerName, contentInstanceValue, callBackForResponse) {
-    ContainerBodyGeneration(AEName, containerName, contentInstanceValue, callBackForResponse);
+exports.ContainerBodyGenerator = function(containerName) {
+    return ContainerBodyGeneration(containerName);
 };
 
-exports.contentInstanceBodyGenerator = function(AEName, containerName, contentInstanceValue, callBackForResponse) {
-    contentInstanceBodyGeneration(AEName, containerName, contentInstanceValue, callBackForResponse);
+exports.contentInstanceBodyGenerator = function(contentInstanceValue) {
+    return contentInstanceBodyGeneration(contentInstanceValue);
 };
+
+// FIWARE Body Generator
+
+
+
+

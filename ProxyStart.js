@@ -10,8 +10,6 @@ var bodyParser = require('body-parser');
 var fiwareController = require('./ProxyModule/FiwareController');
 var oneM2MController = require('./ProxyModule/oneM2MController');
 
-var bodyGenerator = require('./ProxyModule/Domain/BodyGenerator');
-
 var app = express();
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended:false}));
@@ -50,7 +48,6 @@ app.post('/FiwareNotificationEndpoint', function(request, response) {
 
 // Device information from MMG management system
 app.post('/MMGDeviceInfoEndpoint', function(request, response) {
-    
     var selectedDevices = request.body['FiwareDevices']; // Root
     var deviceInfo = selectedDevices.deviceInfo;
     var deviceCount = Object.keys(deviceInfo).length;
@@ -81,12 +78,6 @@ app.post('/MMGDeviceInfoEndpoint', function(request, response) {
         response.status(200).send('WISE-IoT');
     });
 });
-
-app.post('/test', function (request, response) {
-    console.log("test console");
-    var test = JSON.stringify(request.body);
-    console.log(test);
-})
 
 // Server testing code
 app.get('/', function (request, response) {

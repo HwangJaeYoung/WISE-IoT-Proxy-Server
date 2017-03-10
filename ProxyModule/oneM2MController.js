@@ -33,8 +33,8 @@ var fiwareDeviceRegistration = function(fiwareInformation){
                     if(err) {
                         console.log(err);
                     } else {
-                        console.log("in");
-                        // aeRegistrationCallback(null);
+                        console.log("End AE Registration");
+                        aeRegistrationCallback(null);
                     }
                 }
             );
@@ -48,7 +48,6 @@ var fiwareDeviceRegistration = function(fiwareInformation){
                 function () { return count < deviceLists; },
 
                 function (async_for_loop_callback) {
-
                     // Creating AE name using Entity Name and Entity Type.
                     var AEName = deviceInfo[Object.keys(deviceInfo)[count]].entityName + ":" + deviceInfo[Object.keys(deviceInfo)[count]].entityType;
                     containerRegistration.ContainerRegistrationExecution(AEName, deviceInfo[Object.keys(deviceInfo)[count]], function () {
@@ -59,7 +58,8 @@ var fiwareDeviceRegistration = function(fiwareInformation){
                     if(err) {
                         console.log(err);
                     } else {
-                        containerRegistrationCallback(null);
+                        console.log("End Container Registration");
+                        containerRegistrationCallback("asdf", null);
                     }
                 }
             );
@@ -70,7 +70,7 @@ var fiwareDeviceRegistration = function(fiwareInformation){
             callback(null, '끝');
         }
     ], function (err, result) {
-
+        console.log("레알 끝");
     });
 };
 

@@ -3,10 +3,12 @@
  */
 
 var requestToAnotherServer = require('request');
+var bodyGenerator = require('../Domain/BodyGenerator');
 
 var RegistrationExecution = function (AEName, containerName, contentInstanceValue, callBackForResponse) {
 
     var targetURL = yellowTurtleIP + '/mobius-yt/' + AEName + "/" + containerName;
+    var bodyObject = bodyGenerator.contentInstanceBodyGenerator(contentInstanceValue);
 
     requestToAnotherServer({
         url: targetURL,
@@ -16,11 +18,9 @@ var RegistrationExecution = function (AEName, containerName, contentInstanceValu
             'Accept': 'application/json',
             'X-M2M-RI': '12345',
             'X-M2M-Origin': 'Origin',
-            'Content-Type': 'application/vnd.onem2m-res+json; ty=2',
+            'Content-Type': 'application/vnd.onem2m-res+json; ty=4',
         },
-        body: { // NGSI10에 따른 payload이 구성이다.(queryContext)
-            'App-ID': "0.2.481.2.0001.001.000111"
-        }
+        body: bodyObject
     }, function (error, AECreateResponse, body) {
         callBackForResponse();
     });

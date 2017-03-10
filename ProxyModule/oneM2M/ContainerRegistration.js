@@ -2,7 +2,9 @@
  * Created by JaeYoungHwang on 2017-03-03.
  */
 
+var async = require('async');
 var requestToAnotherServer = require('request');
+var bodyGenerator = require('../Domain/BodyGenerator');
 var contentInstanceRegistration = require('./contentInsatnceRegistration');
 
 var RegistrationExecution = function (AEName, deviceInfo, callBackForResponse) {
@@ -18,9 +20,10 @@ var RegistrationExecution = function (AEName, deviceInfo, callBackForResponse) {
 
         function (async_for_loop_callback) {
 
-            if (attributeKey[count] !== 'entityName' && attributeKey[count] !== 'entityType') {
+            if ((attributeKey[count] == 'entityName' || attributeKey[count] == 'entityType') == false) {
                 var targetURL = yellowTurtleIP + '/mobius-yt/' + AEName;
                 var containerName = attributeKey[count];
+                var bodyObject = bodyGenerator.ContainerBodyGenerator(containerName);
 
                 requestToAnotherServer({
                     url: targetURL,
@@ -30,18 +33,19 @@ var RegistrationExecution = function (AEName, deviceInfo, callBackForResponse) {
                         'Accept': 'application/json',
                         'X-M2M-RI': '12345',
                         'X-M2M-Origin': 'Origin',
-                        'Content-Type': 'application/vnd.onem2m-res+json; ty=2',
+                        'Content-Type': 'application/vnd.onem2m-res+json; ty=3',
                     },
-                    body: { // NGSI10에 따른 payload이 구성이다.(queryContext)
-                        'App-ID': "0.2.481.2.0001.001.000111"
-                    }
+                    body: bodyObject
                 }, function (error, AECreateResponse, body) {
-                    var contextInstanceValue = deviceInfo[attributeKey[count]].value;
-                    contentInstanceRegistration.contentInstanceRegistrationExecution(AEName, containerName, contextInstanceValue, function () {
+                    var contentInstanceValue = deviceInfo[attributeKey[count]].value;
+                    contentInstanceRegistration.contentInstanceRegistrationExecution(AEName, containerName, contentInstanceValue, function () {
                         count++;
                         async_for_loop_callback();
                     });
                 });
+            } else {
+                count++;
+                async_for_loop_callback();
             }
         },
         function (err, n) {

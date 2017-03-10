@@ -34,6 +34,7 @@ var iterationQueryEntity = function(fiwareDeviceInfo, fiwareControllerCallback) 
             if (err) {
                 console.log(err);
             } else {
+                console.log("Fiware Device Retrieve finish");
                 fiwareDeviceInfoObject.deviceInfo = deviceObjectRoot;
                 fiwareDevicesObject.FiwareDevices = fiwareDeviceInfoObject;
                 fiwareControllerCallback(fiwareDevicesObject);

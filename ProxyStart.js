@@ -65,7 +65,6 @@ app.post('/MMGDeviceInfoEndpoint', function(request, response) {
         function(callbackForOneM2M){
             fiwareController.executeQueryEntity(fiwareDeviceInfo, function (detailFiwareDeviceInfo) {
                 callbackForOneM2M(null, detailFiwareDeviceInfo);
-                console.log(detailFiwareDeviceInfo);
             });
         },
         // oneM2M Registration callback

@@ -34,6 +34,10 @@ var contentInstanceBodyGeneration = function (contentInstanceName) {
     return bodyObject;
 };
 
+var subscriptionBodyGenerator = function () {
+    
+}
+
 // oneM2M Body Generator
 exports.AEBodyGenerator = function(AEName) {
     return AEBodyGeneration(AEName);
@@ -48,7 +52,6 @@ exports.contentInstanceBodyGenerator = function(contentInstanceValue) {
 };
 
 // FIWARE Body Generator
-
-
-
-
+exports.fiwareSubscriptioinBodyGenerator = function () {
+    return subscriptionBodyGenerator();
+}

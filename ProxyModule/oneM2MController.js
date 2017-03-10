@@ -9,7 +9,6 @@ var containerRegistration = require('./oneM2M/ContainerRegistration');
 
 var fiwareDeviceRegistration = function(fiwareInformation){
 
-    var count = 0;
     var selectedDevices = fiwareInformation['FiwareDevices']; // Root
     var deviceInfo = selectedDevices.deviceInfo;
     var deviceLists = Object.keys(deviceInfo).length;
@@ -18,6 +17,7 @@ var fiwareDeviceRegistration = function(fiwareInformation){
 
         // AE registration
         function(aeRegistrationCallback){
+            var count = 0;
             async.whilst(
                 function () { return count < deviceLists; },
 
@@ -33,7 +33,7 @@ var fiwareDeviceRegistration = function(fiwareInformation){
                     if(err) {
                         console.log(err);
                     } else {
-                        console.log("End AE Registration");
+                        console.log("AE Registration finish");
                         aeRegistrationCallback(null);
                     }
                 }
@@ -43,7 +43,7 @@ var fiwareDeviceRegistration = function(fiwareInformation){
         // Container, contentInstance Registration
         function(containerRegistrationCallback){
 
-            count = 0; // Initialization for counting
+            var count = 0; // Initialization for counting
             async.whilst(
                 function () { return count < deviceLists; },
 
@@ -58,7 +58,7 @@ var fiwareDeviceRegistration = function(fiwareInformation){
                     if(err) {
                         console.log(err);
                     } else {
-                        console.log("End Container Registration");
+                        console.log("Container/contentInstance Registration finish");
                         containerRegistrationCallback("asdf", null);
                     }
                 }
@@ -67,7 +67,27 @@ var fiwareDeviceRegistration = function(fiwareInformation){
 
         // Subscription Registration
         function(arg1, callback){
-            callback(null, '끝');
+            var count = 0;
+            async.whilst(
+                function () { return count < deviceLists; },
+
+                function (async_for_loop_callback) {
+
+                    // Creating AE name using Entity Name and Entity Type.
+                    var AEName = deviceInfo[Object.keys(deviceInfo)[count]].entityName + ":" + deviceInfo[Object.keys(deviceInfo)[count]].entityType;
+                    AERegistration.AERegistrationExecution(AEName, function () {
+                        count++; async_for_loop_callback(null, count);
+                    });
+                },
+                function (err, n) {
+                    if(err) {
+                        console.log(err);
+                    } else {
+                        console.log("AE Registration finish");
+                        callback(null, '끝');
+                    }
+                }
+            );
         }
     ], function (err, result) {
         console.log("레알 끝");

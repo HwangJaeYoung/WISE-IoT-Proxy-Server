@@ -10,6 +10,10 @@ var bodyParser = require('body-parser');
 var fiwareController = require('./ProxyModule/FiwareController');
 var oneM2MController = require('./ProxyModule/oneM2MController');
 
+//*****************
+var getBodyInfo = require('./ProxyModule/Domain/BodyGenerator');
+//
+
 var app = express();
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended:false}));
@@ -44,11 +48,21 @@ fs.readFile('conf.json', 'utf-8', function (err, data) {
 // Fiware Subscription endpoint
 app.post('/FiwareNotificationEndpoint', function(request, response) {
 
+
+
+
+
+
+
 });
 
 // Device information from MMG management system
 app.post('/MMGDeviceInfoEndpoint', function(request, response) {
-    var selectedDevices = request.body['FiwareDevices']; // Root
+
+    var data = getBodyInfo.fiwareSubscriptionBodyGenerator();
+    console.log(JSON.stringify(data));
+
+    /*var selectedDevices = request.body['FiwareDevices']; // Root
     var deviceInfo = selectedDevices.deviceInfo;
     var deviceCount = Object.keys(deviceInfo).length;
 
@@ -68,14 +82,21 @@ app.post('/MMGDeviceInfoEndpoint', function(request, response) {
             });
         },
         // oneM2M Registration callback
-        function(fiwareDeviceObjects, callbackAboutAERegistration){
-            oneM2MController.registrationFiwareToOneM2M(fiwareDeviceObjects, function () {
-                callbackAboutAERegistration(null, fiwareDeviceObjects);
+        function(detailFiwareDeviceInfo, callbackAboutAERegistration){
+            oneM2MController.registrationFiwareToOneM2M(detailFiwareDeviceInfo, function () {
+                callbackAboutAERegistration(null, detailFiwareDeviceInfo);
             });
         },
+
+        // Fiware Subscription registration
+        function(detailFiwareDeviceInfo, callbackAboutAERegistration){
+            oneM2MController.registrationFiwareToOneM2M(detailFiwareDeviceInfo, function () {
+                callbackAboutAERegistration(null, detailFiwareDeviceInfo);
+            });
+        }
     ], function (err, result) {
         response.status(200).send('WISE-IoT');
-    });
+    });*/
 });
 
 // Server testing code

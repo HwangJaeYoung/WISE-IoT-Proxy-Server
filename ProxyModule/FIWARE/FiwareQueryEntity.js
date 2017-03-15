@@ -4,7 +4,7 @@
 
 var requestToAnotherServer = require('request');
 
-var getDeviceInfo = function (EntityName, EntityType, fiwareCallback) {
+var gettingDeviceInfo = function (EntityName, EntityType, fiwareCallback) {
 
     var targetURL = fiwareIP + '/v2/entities/' + EntityName + '/' + 'attrs' + '?' + 'type=' + EntityType;
 
@@ -39,5 +39,5 @@ var getDeviceInfo = function (EntityName, EntityType, fiwareCallback) {
 };
 
 exports.getFiwareDevice = function(EntityName, EntityType, fiwareCallback) {
-    getDeviceInfo(EntityName, EntityType, fiwareCallback);
+    gettingDeviceInfo(EntityName, EntityType, fiwareCallback);
 };

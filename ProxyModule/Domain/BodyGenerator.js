@@ -35,8 +35,39 @@ var contentInstanceBodyGeneration = function (contentInstanceName) {
 };
 
 var subscriptionBodyGenerator = function () {
-    
-}
+    var bodyObject = new Object();
+
+    // Description
+    bodyObject['description'] = "Fiware Device Subscription for oneM2M";
+
+    // Making subject information
+    var subjectObject = new Object();
+
+    var subjectRoot = new Object();
+    var entitiesObject = new Object();
+    var entitiesArray = new Array();
+    var conditionArray = new Array();
+
+    var entity = new Object();
+    entity['id'] = "example entity1";
+    entity['type'] = "example type1";
+
+    entitiesArray.push(entity);
+    conditionArray.push(condition);
+
+    var condition = new Object();
+    condition['attrs'] = conditionArray;
+
+    subjectRoot['entities'] = entitiesArray;
+    subjectRoot['condition'] = conditionArray;
+
+    bodyObject['subject'] = subjectRoot;
+
+    // Making notification information
+    var notificationObject = new Object();
+
+    return bodyObject;
+};
 
 // oneM2M Body Generator
 exports.AEBodyGenerator = function(AEName) {
@@ -52,6 +83,6 @@ exports.contentInstanceBodyGenerator = function(contentInstanceValue) {
 };
 
 // FIWARE Body Generator
-exports.fiwareSubscriptioinBodyGenerator = function () {
+exports.fiwareSubscriptionBodyGenerator = function () {
     return subscriptionBodyGenerator();
-}
+};

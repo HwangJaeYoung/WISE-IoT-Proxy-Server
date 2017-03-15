@@ -4,8 +4,8 @@
 
 // extract the modules
 var async = require('async');
-var requestToAnotherServer = require('request');
-var getFiwareDevice = require('./FIWARE/FiwareQueryEntity');
+var getFiwareDeviceController = require('./FIWARE/FiwareQueryEntity');
+var subFiwareDeviceController = require('./FIWARE/FiwareSubscription');
 
 var iterationQueryEntity = function(fiwareDeviceInfo, fiwareControllerCallback) {
     var count = 0;
@@ -20,7 +20,7 @@ var iterationQueryEntity = function(fiwareDeviceInfo, fiwareControllerCallback) 
         function () { return count < deviceLists; },
 
         function (async_for_loop_callback) {
-            getFiwareDevice.getFiwareDevice(fiwareDeviceInfo.entityName[count], fiwareDeviceInfo.entityType[count], function(responseObject) {
+            getFiwareDeviceController.getFiwareDevice(fiwareDeviceInfo.entityName[count], fiwareDeviceInfo.entityType[count], function(responseObject) {
 
                 // Defining FIWARE Device
                 var deviceName = "device" + (count + 1);
@@ -43,6 +43,33 @@ var iterationQueryEntity = function(fiwareDeviceInfo, fiwareControllerCallback) 
     );
 };
 
+var iterationEntitySubscription = function(fiwareDeviceInfo, fiwareControllerCallback) {
+    var count = 0;
+    var deviceLists = fiwareDeviceInfo.getDeviceNumber();
+
+    async.whilst(
+        function () { return count < deviceLists; },
+
+        function (async_for_loop_callback) {
+            subFiwareDeviceController.subFiwareDevice(fiwareDeviceInfo.entityName[count], fiwareDeviceInfo.entityType[count], function(responseObject) {
+                // Checking for iteration
+                count++; async_for_loop_callback(null, count);
+            });
+        },
+        function (err, n) {
+            if (err) {
+                console.log(err);
+            } else {
+                console.log("Fiware Device Subscription finish");
+            }
+        }
+    );
+};
+
 exports.executeQueryEntity = function(fiwareDeviceInfo, fiwareControllerCallback) {
     iterationQueryEntity(fiwareDeviceInfo, fiwareControllerCallback);
+};
+
+exports.executeSubscription = function (fiwareDeviceInfo, fiwareControllerCallback) {
+    iterationEntitySubscription(fiwareDeviceInfo, fiwareControllerCallback);
 };

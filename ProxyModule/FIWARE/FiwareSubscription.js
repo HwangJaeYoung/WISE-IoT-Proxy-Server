@@ -4,7 +4,7 @@
 
 var requestToAnotherServer = require('request');
 
-var getDeviceInfo = function (EntityName, EntityType, fiwareCallback) {
+var subscriptionFiwareDevice = function (EntityName, EntityType, fiwareCallback) {
 
     var targetURL = fiwareIP + '/v2/subscriptions/';
 
@@ -14,7 +14,8 @@ var getDeviceInfo = function (EntityName, EntityType, fiwareCallback) {
         headers : {
             'Accept' : 'application/json',
             'Content-Type' : 'application/json'
-        }
+        },
+        body:""
     }, function (error, fiwareResponse, body) {
         if(typeof(fiwareResponse) !== 'undefined') {
             if (fiwareResponse.statusCode == 200) {
@@ -24,6 +25,6 @@ var getDeviceInfo = function (EntityName, EntityType, fiwareCallback) {
     });
 }
 
-exports.getFiwareDevice = function(EntityName, EntityType, fiwareCallback) {
-    getDeviceInfo(EntityName, EntityType, fiwareCallback);
+exports.subFiwareDevice = function(EntityName, EntityType, fiwareCallback) {
+    subscriptionFiwareDevice(EntityName, EntityType, fiwareCallback);
 };

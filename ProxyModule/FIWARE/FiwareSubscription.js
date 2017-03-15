@@ -21,9 +21,10 @@ var subscriptionFiwareDevice = function (entityName, entityType, deviceInfo, fiw
         body: bodyObject
     }, function (error, fiwareResponse, body) {
         if(typeof(fiwareResponse) !== 'undefined') {
-            if (fiwareResponse.statusCode == 201) {
-                console.log(fiwareResponse.location);
-                fiwareCallback(fiwareResponse.location); // Callback method for sending entity subscription result to FiwareController
+            if (!error && fiwareResponse.statusCode == 201) {
+                var headerLocationSplit = fiwareResponse.headers.location.split("/");
+                var subscriptionID = headerLocationSplit[headerLocationSplit.length - 1];
+                fiwareCallback(subscriptionID); // Callback method for sending entity subscription result to FiwareController
             }
         }
     });

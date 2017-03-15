@@ -58,7 +58,7 @@ var iterationEntitySubscription = function(fiwareInformation, fiwareControllerCa
         function (async_for_loop_callback) {
             subFiwareDeviceController.subFiwareDevice(deviceInfo[Object.keys(deviceInfo)[count]].entityName, deviceInfo[Object.keys(deviceInfo)[count]].entityType, deviceInfo[Object.keys(deviceInfo)[count]], function(subscriptionID) {
                 // Checking for iteration
-                subscriptionIDCollector.push(subscriptionID);
+                subscriptionIDCollector.push(subscriptionID + '\n');
                 count++; async_for_loop_callback(null, count);
             });
         },

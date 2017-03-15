@@ -7,12 +7,13 @@ var bodyGenerator = require('../Domain/BodyGenerator');
 
 var subscriptionFiwareDevice = function (entityName, entityType, deviceInfo, fiwareCallback) {
 
-    var targetURL = fiwareIP + '/v2/subscriptions/';
+    var targetURL = fiwareIP + '/v2/subscriptions';
     var bodyObject = bodyGenerator.fiwareSubscriptionBodyGenerator(entityName, entityType, deviceInfo);
 
     // Request for subscribing fiware device information from ContextBroker (Subscription Entity)
     requestToAnotherServer( { url : targetURL,
         method : 'POST',
+        json: true,
         headers : {
             'Accept' : 'application/json',
             'Content-Type' : 'application/json'
@@ -20,11 +21,9 @@ var subscriptionFiwareDevice = function (entityName, entityType, deviceInfo, fiw
         body: bodyObject
     }, function (error, fiwareResponse, body) {
         if(typeof(fiwareResponse) !== 'undefined') {
-            if (fiwareResponse.statusCode == 200) {
-
-
-
-                fiwareCallback(resultObject); // Callback method for sending entity subscription result to FiwareController
+            if (fiwareResponse.statusCode == 201) {
+                console.log(fiwareResponse.location);
+                fiwareCallback(fiwareResponse.location); // Callback method for sending entity subscription result to FiwareController
             }
         }
     });

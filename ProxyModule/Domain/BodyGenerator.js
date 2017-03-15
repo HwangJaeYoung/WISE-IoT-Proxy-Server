@@ -89,7 +89,7 @@ var subscriptionBodyGenerator = function (entityName, entityType, deviceInfo) {
     bodyObject['notification'] = notification;
 
     /****************** Expires & Throttling ******************/
-    bodyObject['expires'] = "2017- 17 - 1717";
+    bodyObject['expires'] = "2040-01-01T14:00:00.00Z"; // We can omit 'expires' attribute then it will be permanently
     bodyObject['throttling'] = 5;
 
     return bodyObject;

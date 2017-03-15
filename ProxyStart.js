@@ -10,10 +10,6 @@ var bodyParser = require('body-parser');
 var fiwareController = require('./ProxyModule/FiwareController');
 var oneM2MController = require('./ProxyModule/oneM2MController');
 
-//*****************
-var getBodyInfo = require('./ProxyModule/Domain/BodyGenerator');
-//
-
 var app = express();
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended:false}));
@@ -49,21 +45,12 @@ fs.readFile('conf.json', 'utf-8', function (err, data) {
 
 // Fiware Subscription endpoint
 app.post('/FiwareNotificationEndpoint', function(request, response) {
-
-
-
-
-
-
-
+    var temp = request.body['data']; // Root
+    console.log(temp)
 });
 
 // Device information from MMG management system
 app.post('/MMGDeviceInfoEndpoint', function(request, response) {
-
-    var data = getBodyInfo.fiwareSubscriptionBodyGenerator();
-    console.log(JSON.stringify(data));
-
     var selectedDevices = request.body['FiwareDevices']; // Root
     var deviceInfo = selectedDevices.deviceInfo;
     var deviceCount = Object.keys(deviceInfo).length;
@@ -83,6 +70,7 @@ app.post('/MMGDeviceInfoEndpoint', function(request, response) {
                 callbackForOneM2M(null, detailFiwareDeviceInfo);
             });
         },
+
         // oneM2M Registration callback
         function(detailFiwareDeviceInfo, callbackAboutOneM2MRegistration){
             oneM2MController.registrationFiwareToOneM2M(detailFiwareDeviceInfo, function () {
@@ -92,8 +80,32 @@ app.post('/MMGDeviceInfoEndpoint', function(request, response) {
 
         // Fiware Subscription registration
         function(detailFiwareDeviceInfo, callbackFiwareSubscription){
-            fiwareController.executeSubscriptionEntity(detailFiwareDeviceInfo, function () {
-                callbackFiwareSubscription(null);
+
+            fiwareController.executeSubscriptionEntity(detailFiwareDeviceInfo, function (subscriptionArray) {
+                var count = 0;
+                async.whilst(
+                    function () {
+                        return count < subscriptionArray.length;
+                    },
+
+                    function (async_for_loop_callback) {
+                        fs.appendFile('subscriptionList.txt', subscriptionArray[count], function (err) {
+                            if(err) {
+                                console.log('FATAL An error occurred trying to write in the file: ' + err);
+                            } else {
+                                count++; async_for_loop_callback();
+                            }
+                        });
+                    },
+                    function (err, n) {
+                        if (err) {
+                            console.log(err);
+                        } else {
+                            console.log('SubscriptionID registration success!!');
+                            callbackFiwareSubscription(null);
+                        }
+                    }
+                );
             });
         }
     ], function (err, result) {

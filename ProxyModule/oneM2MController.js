@@ -7,7 +7,7 @@ var async = require('async');
 var AERegistration = require('./oneM2M/AERegistration');
 var containerRegistration = require('./oneM2M/ContainerRegistration');
 
-var fiwareDeviceRegistration = function(fiwareInformation){
+var fiwareDeviceRegistration = function(fiwareInformation, oneM2MControllerCallback){
 
     var selectedDevices = fiwareInformation['FiwareDevices']; // Root
     var deviceInfo = selectedDevices.deviceInfo;
@@ -33,7 +33,7 @@ var fiwareDeviceRegistration = function(fiwareInformation){
                     if(err) {
                         console.log(err);
                     } else {
-                        console.log("AE Registration finish");
+                        console.log("AE Registration is finished");
                         aeRegistrationCallback(null);
                     }
                 }
@@ -58,42 +58,18 @@ var fiwareDeviceRegistration = function(fiwareInformation){
                     if(err) {
                         console.log(err);
                     } else {
-                        console.log("Container/contentInstance Registration finish");
-                        containerRegistrationCallback("asdf", null);
-                    }
-                }
-            );
-        },
-
-        // Subscription Registration
-        function(arg1, callback){
-            var count = 0;
-            async.whilst(
-                function () { return count < deviceLists; },
-
-                function (async_for_loop_callback) {
-
-                    // Creating AE name using Entity Name and Entity Type.
-                    var AEName = deviceInfo[Object.keys(deviceInfo)[count]].entityName + ":" + deviceInfo[Object.keys(deviceInfo)[count]].entityType;
-                    AERegistration.AERegistrationExecution(AEName, function () {
-                        count++; async_for_loop_callback(null, count);
-                    });
-                },
-                function (err, n) {
-                    if(err) {
-                        console.log(err);
-                    } else {
-                        console.log("AE Registration finish");
-                        callback(null, '끝');
+                        console.log("Container/contentInstance Registration is finished");
+                        containerRegistrationCallback(null);
                     }
                 }
             );
         }
     ], function (err, result) {
-        console.log("레알 끝");
+        console.log("AE, Container, contentInstance registration is finished");
+        oneM2MControllerCallback();
     });
 };
 
-exports.registrationFiwareToOneM2M = function(fiwareInformation) {
-    fiwareDeviceRegistration(fiwareInformation);
+exports.registrationFiwareToOneM2M = function(fiwareInformation, oneM2MControllerCallback) {
+    fiwareDeviceRegistration(fiwareInformation, oneM2MControllerCallback);
 };

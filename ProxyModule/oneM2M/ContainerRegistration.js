@@ -39,8 +39,7 @@ var RegistrationExecution = function (AEName, deviceInfo, callBackForResponse) {
                 }, function (error, AECreateResponse, body) {
                     var contentInstanceValue = deviceInfo[attributeKey[count]].value;
                     contentInstanceRegistration.contentInstanceRegistrationExecution(AEName, containerName, contentInstanceValue, function () {
-                        count++;
-                        async_for_loop_callback();
+                        count++; async_for_loop_callback();
                     });
                 });
             } else {

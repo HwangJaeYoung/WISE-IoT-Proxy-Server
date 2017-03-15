@@ -37,15 +37,30 @@ fs.readFile('conf.json', 'utf-8', function (err, data) {
         proxyPort = conf['proxyPort'];
         notificationURL = conf['notificationURL'];
 
-        app.listen(62590, function () {
-            console.log('Server running at http://127.0.0.1:62590');
-        })
+        fs.readFile('subscriptionList.txt', 'utf-8', function (err, data) {
+            if (err) {
+                console.log("FATAL An error occurred trying to read in the file: " + err);
+            } else {
+                var subIdArray = data.split("\n");
+
+                if(subIdArray.length > 0 && subIdArray[0] != '') {
+                    console.log('Subscription Delete start....');
+
+                    fiwareController.executeUnsubscriptionEntity(subIdArray, function () {
+                        serverStartFunction();
+                    });
+                } else {
+                    serverStartFunction();
+                }
+            }
+        });
     }
 });
 
 // Fiware Subscription endpoint
 app.post('/FiwareNotificationEndpoint', function(request, response) {
-    var temp = request.body['data']; // Root
+    console.log("notification in");
+    var temp = JSON.stringify(request.body); // Root
     console.log(temp)
 });
 
@@ -87,7 +102,6 @@ app.post('/MMGDeviceInfoEndpoint', function(request, response) {
                     function () {
                         return count < subscriptionArray.length;
                     },
-
                     function (async_for_loop_callback) {
                         fs.appendFile('subscriptionList.txt', subscriptionArray[count], function (err) {
                             if(err) {
@@ -117,6 +131,13 @@ app.post('/MMGDeviceInfoEndpoint', function(request, response) {
 app.get('/', function (request, response) {
     response.send('<h1>'+ 'WISE-IoT' + '</h1>');
 });
+
+var serverStartFunction = function( ) {
+    // Server start!!
+    app.listen(62590, function () {
+        console.log('Server running at http://127.0.0.1:62590');
+    });
+};
 
 // Entity Container
 function Entity( ) {

@@ -6,6 +6,7 @@
 var async = require('async');
 var getFiwareDeviceController = require('./FIWARE/FiwareQueryEntity');
 var subFiwareDeviceController = require('./FIWARE/FiwareSubscription');
+var unsubFiwareDeviceController = require('./Fiware/FiwareUnsubscription');
 
 var iterationEntityQuery = function(fiwareDeviceInfo, fiwareControllerCallback) {
     var count = 0;
@@ -66,8 +67,32 @@ var iterationEntitySubscription = function(fiwareInformation, fiwareControllerCa
             if (err) {
                 console.log(err);
             } else {
-                console.log("Fiware Device Subscription finish");
+                console.log("Fiware Device Subscription is finished");
                 fiwareControllerCallback(subscriptionIDCollector);
+            }
+        }
+    );
+};
+
+var iterationEntityUnsubscription = function(subscriptionIDArray, fiwareControllerCallback) {
+
+    var count = 0;
+
+    async.whilst(
+        function () { return count < subscriptionIDArray.length; },
+
+        function (async_for_loop_callback) {
+            unsubFiwareDeviceController.unsubFiwareDevice(subscriptionIDArray[count], function() {
+                // Checking for iteration
+                count++; async_for_loop_callback(null, count);
+            });
+        },
+        function (err, n) {
+            if (err) {
+                console.log(err);
+            } else {
+                console.log("Fiware Device Unsubscription is finished");
+                fiwareControllerCallback();
             }
         }
     );
@@ -79,4 +104,8 @@ exports.executeQueryEntity = function(fiwareDeviceInfo, fiwareControllerCallback
 
 exports.executeSubscriptionEntity = function (detailFiwareDeviceInfo, fiwareControllerCallback) {
     iterationEntitySubscription(detailFiwareDeviceInfo, fiwareControllerCallback);
+};
+
+exports.executeUnsubscriptionEntity = function (subscriptionID, fiwareControllerCallback) {
+    iterationEntityUnsubscription(subscriptionID, fiwareControllerCallback);
 };

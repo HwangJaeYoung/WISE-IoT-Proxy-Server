@@ -24,6 +24,7 @@ global.fiwareIP = '';
 global.yellowTurtleIP = '';
 global.proxyIP = '';
 global.proxyPort = '';
+global.notificationURL = '';
 
 fs.readFile('conf.json', 'utf-8', function (err, data) {
     if (err) {
@@ -38,6 +39,7 @@ fs.readFile('conf.json', 'utf-8', function (err, data) {
         yellowTurtleIP = conf['yellowTurtleIP'];
         proxyIP = conf['proxyIP'];
         proxyPort = conf['proxyPort'];
+        notificationURL = conf['notificationURL'];
 
         app.listen(62590, function () {
             console.log('Server running at http://127.0.0.1:62590');
@@ -62,7 +64,7 @@ app.post('/MMGDeviceInfoEndpoint', function(request, response) {
     var data = getBodyInfo.fiwareSubscriptionBodyGenerator();
     console.log(JSON.stringify(data));
 
-    /*var selectedDevices = request.body['FiwareDevices']; // Root
+    var selectedDevices = request.body['FiwareDevices']; // Root
     var deviceInfo = selectedDevices.deviceInfo;
     var deviceCount = Object.keys(deviceInfo).length;
 
@@ -82,21 +84,21 @@ app.post('/MMGDeviceInfoEndpoint', function(request, response) {
             });
         },
         // oneM2M Registration callback
-        function(detailFiwareDeviceInfo, callbackAboutAERegistration){
+        function(detailFiwareDeviceInfo, callbackAboutOneM2MRegistration){
             oneM2MController.registrationFiwareToOneM2M(detailFiwareDeviceInfo, function () {
-                callbackAboutAERegistration(null, detailFiwareDeviceInfo);
+                callbackAboutOneM2MRegistration(null, detailFiwareDeviceInfo);
             });
         },
 
         // Fiware Subscription registration
-        function(detailFiwareDeviceInfo, callbackAboutAERegistration){
-            oneM2MController.registrationFiwareToOneM2M(detailFiwareDeviceInfo, function () {
-                callbackAboutAERegistration(null, detailFiwareDeviceInfo);
+        function(detailFiwareDeviceInfo, callbackFiwareSubscription){
+            fiwareController.executeSubscriptionEntity(detailFiwareDeviceInfo, function () {
+                callbackFiwareSubscription(null);
             });
         }
     ], function (err, result) {
         response.status(200).send('WISE-IoT');
-    });*/
+    });
 });
 
 // Server testing code

@@ -34,37 +34,63 @@ var contentInstanceBodyGeneration = function (contentInstanceName) {
     return bodyObject;
 };
 
-var subscriptionBodyGenerator = function () {
+var subscriptionBodyGenerator = function (entityName, entityType, deviceInfo) {
     var bodyObject = new Object();
+    var attributeKey = Object.keys(deviceInfo);
+    var attributeCount = attributeKey.length;
 
     // Description
     bodyObject['description'] = "Fiware Device Subscription for oneM2M";
 
-    // Making subject information
-    var subjectObject = new Object();
-
-    var subjectRoot = new Object();
-    var entitiesObject = new Object();
+    /****************** Subject object generation ******************/
+    // Subject Root
+    var subjectObjectsRoot = new Object();
     var entitiesArray = new Array();
+
+    // Subject entities
+    var entity = new Object();
+    entity['id'] = entityName;
+    entity['type'] = entityType;
+    entitiesArray.push(entity);
+
+    // Subject condition
+    var condition = new Object();
     var conditionArray = new Array();
 
-    var entity = new Object();
-    entity['id'] = "example entity1";
-    entity['type'] = "example type1";
+    for(var i = 0; i < attributeCount; i++) {
+        if ((attributeKey[i] == 'entityName' || attributeKey[i] == 'entityType') == false)
+            conditionArray.push(attributeKey[i]);
+    }
+    condition['attr'] = conditionArray;
 
-    entitiesArray.push(entity);
-    conditionArray.push(condition);
+    // Merging subject information
+    subjectObjectsRoot['entities'] = entitiesArray;
+    subjectObjectsRoot['condition'] = condition;
+    bodyObject['subject'] = subjectObjectsRoot;
 
-    var condition = new Object();
-    condition['attrs'] = conditionArray;
-
-    subjectRoot['entities'] = entitiesArray;
-    subjectRoot['condition'] = conditionArray;
-
-    bodyObject['subject'] = subjectRoot;
-
+    /****************** Notification object generation ******************/
     // Making notification information
-    var notificationObject = new Object();
+    var notification = new Object();
+
+    // Notification http
+    var urlObject = new Object();
+    urlObject['url'] = notificationURL;
+    notification['http'] = urlObject;
+
+    // Notification attrs
+    var attributeArray = new Array();
+    for(var i = 0; i < attributeCount; i++) {
+        if ((attributeKey[i] == 'entityName' || attributeKey[i] == 'entityType') == false)
+            attributeArray.push(attributeKey[i]);
+    }
+
+    // Merging notification information
+    notification['attrs'] = attributeArray;
+    bodyObject['notification'] = notification;
+
+    /****************** Expires & Throttling ******************/
+    bodyObject['expires'] = "2017- 17 - 1717";
+    bodyObject['throttling'] = 5;
 
     return bodyObject;
 };
@@ -83,6 +109,6 @@ exports.contentInstanceBodyGenerator = function(contentInstanceValue) {
 };
 
 // FIWARE Body Generator
-exports.fiwareSubscriptionBodyGenerator = function () {
-    return subscriptionBodyGenerator();
+exports.fiwareSubscriptionBodyGenerator = function (entityName, entityType, deviceInfo) {
+    return subscriptionBodyGenerator(entityName, entityType, deviceInfo);
 };

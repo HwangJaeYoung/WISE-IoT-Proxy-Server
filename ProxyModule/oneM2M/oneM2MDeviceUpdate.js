@@ -26,6 +26,6 @@ var UpdateExecution = function (AEName, containerName, contentInstanceValue, cal
     });
 };
 
-exports.fiwareChangedDataUpdatenExecution = function(AEName, containerName, contentInstanceValue, callBackForResponse) {
+exports.fiwareChangedDataUpdateExecution = function(AEName, containerName, contentInstanceValue, callBackForResponse) {
     UpdateExecution(AEName, containerName, contentInstanceValue, callBackForResponse);
 };

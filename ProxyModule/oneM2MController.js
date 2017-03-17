@@ -6,6 +6,7 @@
 var async = require('async');
 var AERegistration = require('./oneM2M/AERegistration');
 var containerRegistration = require('./oneM2M/ContainerRegistration');
+var oneM2MResourceUpdate = require('./oneM2M/oneM2MDeviceUpdate');
 
 var fiwareDeviceRegistration = function(fiwareInformation, oneM2MControllerCallback){
 
@@ -70,6 +71,48 @@ var fiwareDeviceRegistration = function(fiwareInformation, oneM2MControllerCallb
     });
 };
 
+var fiwareDeviceUpdateForOneM2M = function(fiwareInformation, oneM2MControllerCallback) {
+
+    var attributeOrigin = fiwareInformation['data'][0]; // Root
+    var attributeList = Object.keys(attributeOrigin);
+    var attributeNumber = Object.keys(attributeOrigin).length;
+    var actualAttribueData = new Object();
+
+    for(var i = 0; i < attributeNumber; i++) {
+        if ((attributeList[i] == 'id' || attributeList[i] == 'type') == false) {
+            console.log(i);
+            console.log(attributeList[i]);
+            var value123 = attributeOrigin.attributeList[i];
+            console.log(value123);
+        }
+    }
+
+    /*var count = 0; // Initialization for counting
+    async.whilst(
+        function () { return count < attributeNumber; },
+
+        function (async_for_loop_callback) {
+            // Creating AE name using Entity Name and Entity Type.
+            var AEName = attributeOrigin.id + ":" + attributeOrigin.type;
+            oneM2MResourceUpdate.fiwareChangedDataUpdateExecution(AEName, deviceInfo[Object.keys(deviceInfo)[count]], function () {
+                count++; async_for_loop_callback(null, count);
+            });
+        },
+        function (err, n) {
+            if(err) {
+                console.log(err);
+            } else {
+                console.log("Container/contentInstance Registration is finished");
+
+            }
+        }
+    );*/
+};
+
 exports.registrationFiwareToOneM2M = function(fiwareInformation, oneM2MControllerCallback) {
     fiwareDeviceRegistration(fiwareInformation, oneM2MControllerCallback);
+};
+
+exports.updateFiwareToOneM2M = function (fiwareInformation, oneM2MControllerCallback) {
+    fiwareDeviceUpdateForOneM2M(fiwareInformation, oneM2MControllerCallback);
 };

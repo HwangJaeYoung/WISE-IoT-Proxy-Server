@@ -19,6 +19,8 @@ var unsubscriptionFiwareDevice = function (subscriptionID, fiwareCallback) {
         if(typeof(fiwareResponse) !== 'undefined') {
             if (!error && fiwareResponse.statusCode == 204) {
                 fiwareCallback();
+            } else {
+                fiwareCallback();
             }
         }
     });

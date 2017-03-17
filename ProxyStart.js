@@ -37,9 +37,7 @@ fs.readFile('conf.json', 'utf-8', function (err, data) {
         proxyPort = conf['proxyPort'];
         notificationURL = conf['notificationURL'];
 
-        serverStartFunction();
-
-        /*fs.readFile('subscriptionList.txt', 'utf-8', function (err, data) {
+        fs.readFile('subscriptionList.txt', 'utf-8', function (err, data) {
             if (err) {
                 console.log("FATAL An error occurred trying to read in the file: " + err);
             } else {
@@ -61,14 +59,15 @@ fs.readFile('conf.json', 'utf-8', function (err, data) {
                     serverStartFunction();
                 }
             }
-        });*/
+        });
     }
 });
 
 // Fiware Subscription endpoint
 app.post('/FiwareNotificationEndpoint', function(request, response) {
-    console.log("notification in");
-    oneM2MController.updateFiwareToOneM2M(request.body);
+    oneM2MController.updateFiwareToOneM2M(request.body, function () {
+        console.log('Fiware changed data update is finished');
+    });
 });
 
 // Device information from MMG management system

@@ -6,7 +6,7 @@
 var async = require('async');
 var getFiwareDeviceController = require('./FIWARE/FiwareQueryEntity');
 var subFiwareDeviceController = require('./FIWARE/FiwareSubscription');
-var unsubFiwareDeviceController = require('./Fiware/FiwareUnsubscription');
+var unsubFiwareDeviceController = require('./FIWARE/FiwareUnsubscription');
 
 var iterationEntityQuery = function(fiwareDeviceInfo, fiwareControllerCallback) {
     var count = 0;

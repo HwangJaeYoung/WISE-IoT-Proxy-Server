@@ -9,7 +9,7 @@ var unsubscriptionFiwareDevice = function (subscriptionID, fiwareCallback) {
 
     var targetURL = fiwareIP + '/v2/subscriptions/' + subscriptionID;
 
-    // Request for subscribing fiware device information from ContextBroker (Subscription Entity)
+    // Unsubscribing fiware devices
     requestToAnotherServer( { url : targetURL,
         method : 'DELETE',
         headers : {
@@ -18,10 +18,12 @@ var unsubscriptionFiwareDevice = function (subscriptionID, fiwareCallback) {
     }, function (error, fiwareResponse, body) {
         if(typeof(fiwareResponse) !== 'undefined') {
             if (!error && fiwareResponse.statusCode == 204) {
-                fiwareCallback();
+                fiwareCallback(true); // Success
             } else {
-                fiwareCallback();
+                fiwareCallback(false); // Fail
             }
+        } else { // fiwareRespond has undefined
+            fiwareCallback(false); // Fail
         }
     });
 };

@@ -82,9 +82,15 @@ var iterationEntityUnsubscription = function(subscriptionIDArray, fiwareControll
         function () { return count < subscriptionIDArray.length; },
 
         function (async_for_loop_callback) {
-            unsubFiwareDeviceController.unsubFiwareDevice(subscriptionIDArray[count], function() {
-                // Checking for iteration
-                count++; async_for_loop_callback(null, count);
+            // Checking for iteration
+            unsubFiwareDeviceController.unsubFiwareDevice(subscriptionIDArray[count], function(requestStatus) {
+                // Unsubscribing operation success
+                if(requestStatus) {
+                    count++;
+                    async_for_loop_callback(null, count);
+                } else {  // Unsubscribing operation fail
+                    async_for_loop_callback(null, count);
+                }
             });
         },
         function (err, n) {

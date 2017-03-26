@@ -18,7 +18,7 @@ var RegistrationExecution = function (AEName, callBackForResponse) {
             'Accept': 'application/json',
             'X-M2M-RI': '12345',
             'X-M2M-Origin': 'C',
-            'Content-Type': 'application/vnd.onem2m-res+json; ty=2',
+            'Content-Type': 'application/vnd.onem2m-res+json; ty=2'
         },
         body: bodyObject
     }, function (error, AECreateResponse, body) {

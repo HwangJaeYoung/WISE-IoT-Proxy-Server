@@ -9,6 +9,7 @@ var express = require('express');
 var bodyParser = require('body-parser');
 var fiwareController = require('./ProxyModule/FiwareController');
 var oneM2MController = require('./ProxyModule/oneM2MController');
+var statusCodeMessage = require('./ETC/StatusCode');
 
 var app = express();
 app.use(bodyParser.json());
@@ -87,8 +88,13 @@ app.post('/MMGDeviceInfoEndpoint', function(request, response) {
     async.waterfall([
         // Get Fiware device information
         function(callbackForOneM2M){
-            fiwareController.executeQueryEntity(fiwareDeviceInfo, function (detailFiwareDeviceInfo) {
-                callbackForOneM2M(null, detailFiwareDeviceInfo);
+            fiwareController.executeQueryEntity(fiwareDeviceInfo, function (statusCode, detailFiwareDeviceInfo) {
+
+                if (statusCode == 200) {
+                    callbackForOneM2M(null, detailFiwareDeviceInfo);
+                } else {
+                    callbackForOneM2M(statusCode, null);
+                }
             });
         },
 
@@ -128,8 +134,16 @@ app.post('/MMGDeviceInfoEndpoint', function(request, response) {
                 );
             });
         }
-    ], function (err, result) {
-        response.status(200).send('WISE-IoT');
+    ], function (statusCode, result) {
+        if (statusCode == 200) {
+            response.status(200).send(statusCodeMessage.statusCodeGenerator(statusCode));
+        } else if (statusCode == 404) {
+            response.status(404).send(statusCodeMessage.statusCodeGenerator(statusCode));
+        } else if (statusCode == 408) {
+            response.status(408).send(statusCodeMessage.statusCodeGenerator(statusCode));
+        } else if (statusCode == 409) {
+            response.status(409).send(statusCodeMessage.statusCodeGenerator(statusCode));
+        }
     });
 });
 

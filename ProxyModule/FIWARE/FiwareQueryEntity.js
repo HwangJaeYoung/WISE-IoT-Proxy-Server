@@ -3,6 +3,7 @@
  */
 
 var requestToAnotherServer = require('request');
+var statusCodeMessage = require('../../ETC/StatusCode');
 
 var gettingDeviceInfo = function (EntityName, EntityType, fiwareCallback) {
 
@@ -17,11 +18,13 @@ var gettingDeviceInfo = function (EntityName, EntityType, fiwareCallback) {
     }, function (error, fiwareResponse, body) {
         if(typeof(fiwareResponse) !== 'undefined') {
 
-            if (!error && fiwareResponse.statusCode == 200) {
+            var statusCode = fiwareResponse.statusCode;
+
+            if (statusCode == 200) {
                 var deviceAttrData = JSON.parse(fiwareResponse.body);
                 var attrResult = Object.keys(deviceAttrData);
 
-                // Adding fiware mandatory information
+                // Adding Fiware mandatory information
                 var resultObject = new Object();
                 resultObject.entityName = EntityName;
                 resultObject.entityType = EntityType;
@@ -32,8 +35,12 @@ var gettingDeviceInfo = function (EntityName, EntityType, fiwareCallback) {
                     valueObject.value =  deviceAttrData[attrResult[i]].value;
                     resultObject[attrResult[i]] = valueObject;
                 }
-                fiwareCallback(resultObject); // Callback method for sending QueryEntity result to FiwareController
-            }
+                fiwareCallback(statusCode, resultObject); // Callback method for sending QueryEntity result to FiwareController
+            } else if (statusCode == 404) {
+                fiwareCallback(statusCode, null);
+            } // Status code will be added later
+        } else { // For example, Request Timeout
+            fiwareCallback(408, null);
         }
     });
 };

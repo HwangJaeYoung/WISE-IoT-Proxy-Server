@@ -21,24 +21,29 @@ var iterationEntityQuery = function(fiwareDeviceInfo, fiwareControllerCallback) 
         function () { return count < deviceLists; },
 
         function (async_for_loop_callback) {
-            getFiwareDeviceController.getFiwareDevice(fiwareDeviceInfo.entityName[count], fiwareDeviceInfo.entityType[count], function(responseObject) {
+            getFiwareDeviceController.getFiwareDevice(fiwareDeviceInfo.entityName[count], fiwareDeviceInfo.entityType[count], function(statusCode, responseObject) {
 
-                // Defining FIWARE Device
-                var deviceName = "device" + (count + 1);
-                deviceObjectRoot[deviceName] = responseObject;
+                if(statusCode == 200) { // request success
+                    // Defining FIWARE Device
+                    var deviceName = "device" + (count + 1);
+                    deviceObjectRoot[deviceName] = responseObject;
 
-                // Checking for iteration
-                count++; async_for_loop_callback(null, count);
+                    // Checking for iteration
+                    count++; async_for_loop_callback(null, count);
+                } else { // request fail
+                    // call error function
+                    async_for_loop_callback(statusCode);
+                }
             });
         },
-        function (err, n) {
-            if (err) {
-                console.log(err);
+        function (statusCode, n) {
+            if (statusCode) {
+                fiwareControllerCallback(statusCode, null);
             } else {
                 console.log("Fiware Device Retrieve is finished");
                 fiwareDeviceInfoObject.deviceInfo = deviceObjectRoot;
                 fiwareDevicesObject.FiwareDevices = fiwareDeviceInfoObject;
-                fiwareControllerCallback(fiwareDevicesObject);
+                fiwareControllerCallback(200, fiwareDevicesObject);
             }
         }
     );

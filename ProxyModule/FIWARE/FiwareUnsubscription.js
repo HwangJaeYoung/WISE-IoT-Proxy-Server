@@ -3,7 +3,6 @@
  */
 
 var requestToAnotherServer = require('request');
-var bodyGenerator = require('../Domain/BodyGenerator');
 
 var unsubscriptionFiwareDevice = function (subscriptionID, fiwareCallback) {
 
@@ -16,14 +15,19 @@ var unsubscriptionFiwareDevice = function (subscriptionID, fiwareCallback) {
             'Accept' : 'application/json',
         },
     }, function (error, fiwareResponse, body) {
+
         if(typeof(fiwareResponse) !== 'undefined') {
-            if (!error && fiwareResponse.statusCode == 204) {
-                fiwareCallback(true); // Success
-            } else {
-                fiwareCallback(false); // Fail
-            }
-        } else { // fiwareRespond has undefined
-            fiwareCallback(false); // Fail
+
+            var statusCode = fiwareResponse.statusCode;
+
+            if (statusCode == 204) {
+                fiwareCallback(statusCode); // Callback method for sending QueryEntity result to FiwareController
+            } else if (statusCode == 404) {
+                fiwareCallback(statusCode);
+            } // Status code will be added later
+        } else { // For example, Request Timeout
+            if(error.code === 'ETIMEDOUT')
+                fiwareCallback(408);
         }
     });
 };

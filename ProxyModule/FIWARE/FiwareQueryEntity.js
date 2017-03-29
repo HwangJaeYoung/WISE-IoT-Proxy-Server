@@ -40,7 +40,8 @@ var gettingDeviceInfo = function (EntityName, EntityType, fiwareCallback) {
                 fiwareCallback(statusCode, null);
             } // Status code will be added later
         } else { // For example, Request Timeout
-            fiwareCallback(408, null);
+            if(error.code === 'ETIMEDOUT')
+                fiwareCallback(408, null);
         }
     });
 };

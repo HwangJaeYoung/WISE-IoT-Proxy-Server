@@ -88,22 +88,22 @@ var iterationEntityUnsubscription = function(subscriptionIDArray, fiwareControll
 
         function (async_for_loop_callback) {
             // Checking for iteration
-            unsubFiwareDeviceController.unsubFiwareDevice(subscriptionIDArray[count], function(requestStatus) {
+            unsubFiwareDeviceController.unsubFiwareDevice(subscriptionIDArray[count], function(statusCode) {
                 // Unsubscribing operation success
-                if(requestStatus) {
+                if(statusCode == 204) {
                     count++;
                     async_for_loop_callback(null, count);
                 } else {  // Unsubscribing operation fail
-                    async_for_loop_callback(null, count);
+                    async_for_loop_callback(statusCode);
                 }
             });
         },
-        function (err, n) {
-            if (err) {
-                console.log(err);
+        function (statusCode, n) {
+            if (statusCode) {
+                fiwareControllerCallback(statusCode);
             } else {
                 console.log("Fiware Device Unsubscription is finished");
-                fiwareControllerCallback();
+                fiwareControllerCallback(statusCode);
             }
         }
     );

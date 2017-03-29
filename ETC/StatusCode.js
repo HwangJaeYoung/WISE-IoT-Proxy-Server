@@ -4,15 +4,17 @@
 
 var getStatusCodeMessage = function(statusCode) {
     if(statusCode == 200) {
-        return "Resource retrieving success"
+        return "Resource retrieving success";
     } else if (statusCode == 201) {
-        return "Resource creating success"
+        return "Resource creating success";
+    } else if (statusCode == 400) {
+        return "Bad Request";
     } else if(statusCode == 404) {
         return "Server can't find resource";
     } else if(statusCode == 409) {
-        return "Resource is conflicted"
+        return "Resource is conflicted";
     } else if(statusCode == 408) {
-        return "Request Timeout"
+        return "Request Timeout";
     }
 };
 

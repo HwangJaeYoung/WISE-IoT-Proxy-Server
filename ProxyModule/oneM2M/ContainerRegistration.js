@@ -36,22 +36,37 @@ var RegistrationExecution = function (AEName, deviceInfo, callBackForResponse) {
                         'Content-Type': 'application/vnd.onem2m-res+json; ty=3',
                     },
                     body: bodyObject
-                }, function (error, AECreateResponse, body) {
-                    var contentInstanceValue = deviceInfo[attributeKey[count]].value;
-                    contentInstanceRegistration.contentInstanceRegistrationExecution(AEName, containerName, contentInstanceValue, function () {
-                        count++; async_for_loop_callback();
-                    });
+                }, function (error, oneM2MResponse, body) {
+
+                    if(typeof(oneM2MResponse) !== 'undefined') {
+
+                        var statusCode = oneM2MResponse.statusCode;
+
+                        if (statusCode == 201) {
+                            var contentInstanceValue = deviceInfo[attributeKey[count]].value;
+                            contentInstanceRegistration.contentInstanceRegistrationExecution(AEName, containerName, contentInstanceValue, function () {
+                                count++; async_for_loop_callback();
+                            });
+                        } else if(statusCode == 400) {
+                            async_for_loop_callback(statusCode);
+                        } else if (statusCode == 409) {
+                            async_for_loop_callback(statusCode);
+                        } // Status code will be added later
+                    } else { // For example, Request Timeout
+                        if(error.code === 'ETIMEDOUT')
+                            async_for_loop_callback(408);
+                    }
                 });
             } else {
                 count++;
                 async_for_loop_callback();
             }
         },
-        function (err, n) {
-            if (err) {
-                console.log(err);
+        function (statusCode, n) {
+            if (statusCode) {
+                callBackForResponse(statusCode);
             } else {
-                callBackForResponse();
+                callBackForResponse(201);
             }
         }
     );

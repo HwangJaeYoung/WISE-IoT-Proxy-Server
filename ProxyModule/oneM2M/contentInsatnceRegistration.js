@@ -21,8 +21,21 @@ var RegistrationExecution = function (AEName, containerName, contentInstanceValu
             'Content-Type': 'application/vnd.onem2m-res+json; ty=4',
         },
         body: bodyObject
-    }, function (error, AECreateResponse, body) {
-        callBackForResponse();
+    }, function (error, oneM2MResponse, body) {
+
+        if(typeof(oneM2MResponse) !== 'undefined') {
+
+            var statusCode = oneM2MResponse.statusCode;
+
+            if (statusCode == 201) {
+                callBackForResponse(statusCode); // Callback method for sending QueryEntity result to FiwareController
+            } else if(statusCode == 400) {
+                callBackForResponse(statusCode);
+            } // Status code will be added later
+        } else { // For example, Request Timeout
+            if(error.code === 'ETIMEDOUT')
+                callBackForResponse(408);
+        }
     });
 };
 

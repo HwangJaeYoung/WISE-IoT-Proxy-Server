@@ -47,14 +47,23 @@ fs.readFile('conf.json', 'utf-8', function (err, data) {
                 if(subIdArray.length > 0 && subIdArray[0] != '') {
                     console.log('Subscription Delete start....');
 
-                    fiwareController.executeUnsubscriptionEntity(subIdArray, function () {
-                        fs.writeFile('subscriptionList.txt', '', function (err) {
-                            if (err)
-                                console.log('FATAL An error occurred trying to write in the file: ' + err);
-                            else {
-                                serverStartFunction();
+                    fiwareController.executeUnsubscriptionEntity(subIdArray, function (statusCode) {
+
+                        if(statusCode == 204) {
+                            fs.writeFile('subscriptionList.txt', '', function (err) {
+                                if (err)
+                                    console.log('FATAL An error occurred trying to write in the file: ' + err);
+                                else {
+                                    serverStartFunction();
+                                }
+                            });
+                        } else {
+                            if (statusCode == 404) {
+                                console.log(statusCodeMessage.statusCodeGenerator(statusCode));
+                            } else if (statusCode == 408) {
+                                console.log(statusCodeMessage.statusCodeGenerator(statusCode));
                             }
-                        });
+                        }
                     });
                 } else {
                     serverStartFunction();
@@ -66,8 +75,17 @@ fs.readFile('conf.json', 'utf-8', function (err, data) {
 
 // Fiware Subscription endpoint
 app.post('/FiwareNotificationEndpoint', function(request, response) {
-    oneM2MController.updateFiwareToOneM2M(request.body, function () {
-        console.log('Fiware changed data update is finished');
+    oneM2MController.updateFiwareToOneM2M(request.body, function (statusCode) {
+        if (statusCode == 201) {
+            console.log('Fiware changed data update is finished');
+            response.status(201).send(statusCodeMessage.statusCodeGenerator(statusCode));
+        } else if (statusCode == 400) {
+            console.log('Bad Request');
+            response.status(400).send(statusCodeMessage.statusCodeGenerator(statusCode));
+        } else if (statusCode == 408) {
+            console.log('Request Timeout');
+            response.status(408).send(statusCodeMessage.statusCodeGenerator(statusCode));
+        }
     });
 });
 
@@ -100,8 +118,13 @@ app.post('/MMGDeviceInfoEndpoint', function(request, response) {
 
         // oneM2M Registration callback
         function(detailFiwareDeviceInfo, callbackAboutOneM2MRegistration){
-            oneM2MController.registrationFiwareToOneM2M(detailFiwareDeviceInfo, function () {
-                callbackAboutOneM2MRegistration(null, detailFiwareDeviceInfo);
+            oneM2MController.registrationFiwareToOneM2M(detailFiwareDeviceInfo, function (statusCode) {
+
+                if(statusCode == 201) {
+                    callbackAboutOneM2MRegistration(null, detailFiwareDeviceInfo);
+                } else {
+                    callbackAboutOneM2MRegistration(statusCode, null);
+                }
             });
         },
 

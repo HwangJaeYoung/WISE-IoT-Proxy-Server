@@ -6,7 +6,7 @@
 var async = require('async');
 var AERegistration = require('./oneM2M/AERegistration');
 var containerRegistration = require('./oneM2M/ContainerRegistration');
-var oneM2MResourceUpdate = require('./oneM2M/oneM2MDeviceUpdate');
+var contentInstanceRegistration = require('./oneM2M/contentInsatnceRegistration');
 
 var fiwareDeviceRegistration = function(fiwareInformation, oneM2MControllerCallback){
 
@@ -26,13 +26,18 @@ var fiwareDeviceRegistration = function(fiwareInformation, oneM2MControllerCallb
 
                     // Creating AE name using Entity Name and Entity Type.
                     var AEName = deviceInfo[Object.keys(deviceInfo)[count]].entityName + ":" + deviceInfo[Object.keys(deviceInfo)[count]].entityType;
-                    AERegistration.AERegistrationExecution(AEName, function () {
-                        count++; async_for_loop_callback(null, count);
+                    AERegistration.AERegistrationExecution(AEName, function (statusCode) {
+
+                        if (statusCode == 201) {
+                            count++; async_for_loop_callback(null, count);
+                        } else {
+                            async_for_loop_callback(statusCode);
+                        }
                     });
                 },
-                function (err, n) {
-                    if(err) {
-                        console.log(err);
+                function (statusCode, n) {
+                    if(statusCode) {
+                        aeRegistrationCallback(statusCode);
                     } else {
                         console.log("AE Registration is finished");
                         aeRegistrationCallback(null);
@@ -51,23 +56,33 @@ var fiwareDeviceRegistration = function(fiwareInformation, oneM2MControllerCallb
                 function (async_for_loop_callback) {
                     // Creating AE name using Entity Name and Entity Type.
                     var AEName = deviceInfo[Object.keys(deviceInfo)[count]].entityName + ":" + deviceInfo[Object.keys(deviceInfo)[count]].entityType;
-                    containerRegistration.ContainerRegistrationExecution(AEName, deviceInfo[Object.keys(deviceInfo)[count]], function () {
-                        count++; async_for_loop_callback(null, count);
+                    containerRegistration.ContainerRegistrationExecution(AEName, deviceInfo[Object.keys(deviceInfo)[count]], function (statusCode) {
+
+                        if (statusCode == 201) {
+                            count++; async_for_loop_callback(null, count);
+                        } else {
+                            async_for_loop_callback(statusCode);
+                        }
                     });
                 },
-                function (err, n) {
-                    if(err) {
-                        console.log(err);
+                function (statusCode, n) {
+                    if(statusCode) {
+                        containerRegistrationCallback(statusCode);
                     } else {
-                        console.log("Container/contentInstance Registration is finished");
+                        console.log("AE Registration is finished");
                         containerRegistrationCallback(null);
                     }
                 }
             );
         }
-    ], function (err, result) {
-        console.log("AE, Container, contentInstance registration is finished");
-        oneM2MControllerCallback();
+    ], function (statusCode, result) {
+
+        if(statusCode == 201) {
+            console.log("AE, Container, contentInstance registration is finished");
+            oneM2MControllerCallback(statusCode);
+        } else {
+            oneM2MControllerCallback(statusCode);
+        }
     });
 };
 
@@ -89,19 +104,24 @@ var fiwareDeviceUpdateForOneM2M = function(fiwareInformation, oneM2MControllerCa
                 var containerName = attributeList[count];
                 var contentInstanceValue = attributeOrigin[attributeList[count]].value;
 
-                oneM2MResourceUpdate.fiwareChangedDataUpdateExecution(AEName, containerName, contentInstanceValue, function () {
-                    count++; async_for_loop_callback(null, count);
+                contentInstanceRegistration.contentInstanceRegistrationExecution(AEName, containerName, contentInstanceValue, function (statusCode) {
+
+                    if(statusCode == 201) {
+                        count++; async_for_loop_callback(null, count);
+                    } else {
+                        async_for_loop_callback(statusCode);
+                    }
                 });
             } else {
                 count++; async_for_loop_callback(null, count);
             }
         },
-        function (err, n) {
-            if(err) {
-                console.log(err);
+        function (statusCode, n) {
+            if(statusCode) {
+                oneM2MControllerCallback(statusCode);
             } else {
-                console.log("Container/contentInstance Registration is finished");
-                oneM2MControllerCallback();
+                console.log("contentInstance Registration is finished");
+                oneM2MControllerCallback(201);
             }
         }
     );

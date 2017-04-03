@@ -47,9 +47,9 @@ fs.readFile('conf.json', 'utf-8', function (err, data) {
                 if(subIdArray.length > 0 && subIdArray[0] != '') {
                     console.log('Subscription Delete start....');
 
-                    fiwareController.executeUnsubscriptionEntity(subIdArray, function (statusCode) {
+                    fiwareController.executeUnsubscriptionEntity(subIdArray, function (requestResult, statusCode) {
 
-                        if(statusCode == 204) {
+                        if(requestResult) { // success (true)
                             fs.writeFile('subscriptionList.txt', '', function (err) {
                                 if (err)
                                     console.log('FATAL An error occurred trying to write in the file: ' + err);
@@ -57,12 +57,8 @@ fs.readFile('conf.json', 'utf-8', function (err, data) {
                                     serverStartFunction();
                                 }
                             });
-                        } else {
-                            if (statusCode == 404) {
-                                console.log(statusCodeMessage.statusCodeGenerator(statusCode));
-                            } else if (statusCode == 408) {
-                                console.log(statusCodeMessage.statusCodeGenerator(statusCode));
-                            }
+                        } else { // fail (false)
+                            console.log(statusCodeMessage.statusCodeGenerator(statusCode));
                         }
                     });
                 } else {
@@ -106,11 +102,11 @@ app.post('/MMGDeviceInfoEndpoint', function(request, response) {
     async.waterfall([
         // Get Fiware device information
         function(callbackForOneM2M){
-            fiwareController.executeQueryEntity(fiwareDeviceInfo, function (statusCode, detailFiwareDeviceInfo) {
+            fiwareController.executeQueryEntity(fiwareDeviceInfo, function (requestResult, statusCode, detailFiwareDeviceInfo) {
 
-                if (statusCode == 200) {
+                if (requestResult) { // success (true)
                     callbackForOneM2M(null, detailFiwareDeviceInfo);
-                } else {
+                } else { // fail (false)
                     callbackForOneM2M(statusCode, null);
                 }
             });
@@ -119,7 +115,6 @@ app.post('/MMGDeviceInfoEndpoint', function(request, response) {
         // oneM2M Registration callback
         function(detailFiwareDeviceInfo, callbackAboutOneM2MRegistration){
             oneM2MController.registrationFiwareToOneM2M(detailFiwareDeviceInfo, function (statusCode) {
-
                 if(statusCode == 201) {
                     callbackAboutOneM2MRegistration(null, detailFiwareDeviceInfo);
                 } else {
@@ -157,16 +152,8 @@ app.post('/MMGDeviceInfoEndpoint', function(request, response) {
                 );
             });
         }
-    ], function (statusCode, result) {
-        if (statusCode == 200) {
-            response.status(200).send(statusCodeMessage.statusCodeGenerator(statusCode));
-        } else if (statusCode == 404) {
-            response.status(404).send(statusCodeMessage.statusCodeGenerator(statusCode));
-        } else if (statusCode == 408) {
-            response.status(408).send(statusCodeMessage.statusCodeGenerator(statusCode));
-        } else if (statusCode == 409) {
-            response.status(409).send(statusCodeMessage.statusCodeGenerator(statusCode));
-        }
+    ], function (statusCode, result) { // response to client such as web or postman
+        response.status(statusCode).send(statusCodeMessage.statusCodeGenerator(statusCode));
     });
 });
 

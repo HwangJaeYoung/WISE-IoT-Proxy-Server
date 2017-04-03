@@ -31,19 +31,18 @@ var iterationEntityQuery = function(fiwareDeviceInfo, fiwareControllerCallback) 
                     // Checking for iteration
                     count++; async_for_loop_callback(null, count);
                 } else { // request fail
-                    // call error function
-                    async_for_loop_callback(statusCode);
+                    async_for_loop_callback(statusCode); // calling error function
                 }
             });
         },
         function (statusCode, n) {
             if (statusCode) {
-                fiwareControllerCallback(statusCode, null);
+                fiwareControllerCallback(false, statusCode, null);
             } else {
-                console.log("Fiware Device Retrieve is finished");
+                console.log("All Fiware Device Retrieve is finished");
                 fiwareDeviceInfoObject.deviceInfo = deviceObjectRoot;
                 fiwareDevicesObject.FiwareDevices = fiwareDeviceInfoObject;
-                fiwareControllerCallback(200, fiwareDevicesObject);
+                fiwareControllerCallback(true, 200, fiwareDevicesObject);
             }
         }
     );
@@ -91,8 +90,7 @@ var iterationEntityUnsubscription = function(subscriptionIDArray, fiwareControll
             unsubFiwareDeviceController.unsubFiwareDevice(subscriptionIDArray[count], function(statusCode) {
                 // Unsubscribing operation success
                 if(statusCode == 204) {
-                    count++;
-                    async_for_loop_callback(null, count);
+                    count++; async_for_loop_callback(null, count);
                 } else {  // Unsubscribing operation fail
                     async_for_loop_callback(statusCode);
                 }
@@ -100,10 +98,10 @@ var iterationEntityUnsubscription = function(subscriptionIDArray, fiwareControll
         },
         function (statusCode, n) {
             if (statusCode) {
-                fiwareControllerCallback(statusCode);
+                fiwareControllerCallback(false, statusCode);
             } else {
                 console.log("Fiware Device Unsubscription is finished");
-                fiwareControllerCallback(statusCode);
+                fiwareControllerCallback(true, statusCode);
             }
         }
     );

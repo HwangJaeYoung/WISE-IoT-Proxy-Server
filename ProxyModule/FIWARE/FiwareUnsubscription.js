@@ -12,7 +12,7 @@ var unsubscriptionFiwareDevice = function (subscriptionID, fiwareCallback) {
     requestToAnotherServer( { url : targetURL,
         method : 'DELETE',
         headers : {
-            'Accept' : 'application/json',
+            'Accept' : 'application/json'
         },
     }, function (error, fiwareResponse, body) {
 
@@ -20,13 +20,13 @@ var unsubscriptionFiwareDevice = function (subscriptionID, fiwareCallback) {
 
             var statusCode = fiwareResponse.statusCode;
 
-            if (statusCode == 204) {
-                fiwareCallback(statusCode); // Callback method for sending QueryEntity result to FiwareController
-            } else if (statusCode == 404) {
+            if (statusCode == 204) { // No content
+                fiwareCallback(statusCode);
+            } else if (statusCode == 404) { // resource not found
                 fiwareCallback(statusCode);
             } // Status code will be added later
         } else { // For example, Request Timeout
-            if(error.code === 'ETIMEDOUT')
+            if(error.code === 'ETIMEDOUT') // request timeout
                 fiwareCallback(408);
         }
     });

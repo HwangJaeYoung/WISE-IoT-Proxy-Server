@@ -39,7 +39,7 @@ var fiwareDeviceRegistration = function(fiwareInformation, oneM2MControllerCallb
                     if(statusCode) {
                         aeRegistrationCallback(statusCode);
                     } else {
-                        console.log("AE Registration is finished");
+                        console.log("All AE registration is finished");
                         aeRegistrationCallback(null);
                     }
                 }
@@ -93,6 +93,7 @@ var fiwareDeviceUpdateForOneM2M = function(fiwareInformation, oneM2MControllerCa
     var attributeNumber = Object.keys(attributeOrigin).length;
 
     var count = 0; // Initialization for counting
+
     async.whilst(
         function () { return count < attributeNumber; },
 
@@ -118,10 +119,10 @@ var fiwareDeviceUpdateForOneM2M = function(fiwareInformation, oneM2MControllerCa
         },
         function (statusCode, n) {
             if(statusCode) {
-                oneM2MControllerCallback(statusCode);
+                oneM2MControllerCallback(false, statusCode);
             } else {
-                console.log("contentInstance Registration is finished");
-                oneM2MControllerCallback(201);
+                console.log("contentInstance registration is finished");
+                oneM2MControllerCallback(true, 201);
             }
         }
     );

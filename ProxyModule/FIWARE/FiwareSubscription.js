@@ -21,11 +21,20 @@ var subscriptionFiwareDevice = function (entityName, entityType, deviceInfo, fiw
         body: bodyObject
     }, function (error, fiwareResponse, body) {
         if(typeof(fiwareResponse) !== 'undefined') {
-            if (!error && fiwareResponse.statusCode == 201) {
+            var statusCode = fiwareResponse.statusCode;
+
+            if (statusCode == 201) { // resource creation
                 var headerLocationSplit = fiwareResponse.headers.location.split("/");
                 var subscriptionID = headerLocationSplit[headerLocationSplit.length - 1];
-                fiwareCallback(subscriptionID); // Callback method for sending entity subscription result to FiwareController
+                fiwareCallback(statusCode, subscriptionID);
+            } else if (statusCode == 400) { // bad request
+                fiwareCallback(statusCode, null);
+            } else if (statusCode == 409) { // resource conflict error
+                fiwareCallback(statusCode, null);
             }
+        } else { // For example, Request Timeout
+            if(error.code === 'ETIMEDOUT') // request timeout
+                fiwareCallback(408, null);
         }
     });
 };

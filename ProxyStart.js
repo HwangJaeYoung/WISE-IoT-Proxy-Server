@@ -58,7 +58,8 @@ fs.readFile('conf.json', 'utf-8', function (err, data) {
                                 }
                             });
                         } else { // fail (false)
-                            console.log(statusCodeMessage.statusCodeGenerator(statusCode));
+                            console.log(statusCodeMessage.statusCodeGenerator(statusCode) + '\n');
+                            console.log('Please restart server...');
                         }
                     });
                 } else {
@@ -71,17 +72,9 @@ fs.readFile('conf.json', 'utf-8', function (err, data) {
 
 // Fiware Subscription endpoint
 app.post('/FiwareNotificationEndpoint', function(request, response) {
-    oneM2MController.updateFiwareToOneM2M(request.body, function (statusCode) {
-        if (statusCode == 201) {
-            console.log('Fiware changed data update is finished');
-            response.status(201).send(statusCodeMessage.statusCodeGenerator(statusCode));
-        } else if (statusCode == 400) {
-            console.log('Bad Request');
-            response.status(400).send(statusCodeMessage.statusCodeGenerator(statusCode));
-        } else if (statusCode == 408) {
-            console.log('Request Timeout');
-            response.status(408).send(statusCodeMessage.statusCodeGenerator(statusCode));
-        }
+    oneM2MController.updateFiwareToOneM2M(request.body, function (requestResult, statusCode) {
+        // In this function we don't use requestResult
+        console.log(statusCodeMessage.statusCodeGenerator(statusCode));
     });
 });
 
@@ -103,7 +96,6 @@ app.post('/MMGDeviceInfoEndpoint', function(request, response) {
         // Get Fiware device information
         function(callbackForOneM2M){
             fiwareController.executeQueryEntity(fiwareDeviceInfo, function (requestResult, statusCode, detailFiwareDeviceInfo) {
-
                 if (requestResult) { // success (true)
                     callbackForOneM2M(null, detailFiwareDeviceInfo);
                 } else { // fail (false)
@@ -126,30 +118,35 @@ app.post('/MMGDeviceInfoEndpoint', function(request, response) {
         // Fiware Subscription registration
         function(detailFiwareDeviceInfo, callbackFiwareSubscription){
 
-            fiwareController.executeSubscriptionEntity(detailFiwareDeviceInfo, function (subscriptionArray) {
-                var count = 0;
-                async.whilst(
-                    function () {
-                        return count < subscriptionArray.length;
-                    },
-                    function (async_for_loop_callback) {
-                        fs.appendFile('subscriptionList.txt', subscriptionArray[count], function (err) {
-                            if(err) {
-                                console.log('FATAL An error occurred trying to write in the file: ' + err);
+            fiwareController.executeSubscriptionEntity(detailFiwareDeviceInfo, function (requestResult, statusCode, subscriptionArray) {
+
+                if(requestResult) { // success (true)
+                    var count = 0;
+                    async.whilst(
+                        function () {
+                            return count < subscriptionArray.length;
+                        },
+                        function (async_for_loop_callback) {
+                            fs.appendFile('subscriptionList.txt', subscriptionArray[count], function (err) {
+                                if (err) {
+                                    console.log('FATAL An error occurred trying to write in the file: ' + err);
+                                } else {
+                                    count++; async_for_loop_callback();
+                                }
+                            });
+                        },
+                        function (err, n) {
+                            if (err) {
+                                console.log(err);
                             } else {
-                                count++; async_for_loop_callback();
+                                console.log('SubscriptionID registration success!!');
+                                callbackFiwareSubscription(201);
                             }
-                        });
-                    },
-                    function (err, n) {
-                        if (err) {
-                            console.log(err);
-                        } else {
-                            console.log('SubscriptionID registration success!!');
-                            callbackFiwareSubscription(null);
                         }
-                    }
-                );
+                    );
+                } else { // fail (false)
+
+                }
             });
         }
     ], function (statusCode, result) { // response to client such as web or postman

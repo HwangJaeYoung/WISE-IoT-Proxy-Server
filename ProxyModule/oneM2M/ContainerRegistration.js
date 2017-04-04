@@ -9,6 +9,9 @@ var contentInstanceRegistration = require('./contentInsatnceRegistration');
 
 var RegistrationExecution = function (AEName, deviceInfo, callBackForResponse) {
 
+    var selectedDevices = fiwareInformation['FiwareDevices']; // Root
+    var deviceInfo = selectedDevices.deviceInfo;
+
     var count = 0;
     var attributeKey = Object.keys(deviceInfo);
     var attributeCount = attributeKey.length;
@@ -36,37 +39,13 @@ var RegistrationExecution = function (AEName, deviceInfo, callBackForResponse) {
                         'Content-Type': 'application/vnd.onem2m-res+json; ty=3',
                     },
                     body: bodyObject
-                }, function (error, oneM2MResponse, body) {
-
-                    if(typeof(oneM2MResponse) !== 'undefined') {
-
-                        var statusCode = oneM2MResponse.statusCode;
-
-                        if (statusCode == 201) {
-                            var contentInstanceValue = deviceInfo[attributeKey[count]].value;
-                            contentInstanceRegistration.contentInstanceRegistrationExecution(AEName, containerName, contentInstanceValue, function () {
-                                count++; async_for_loop_callback();
-                            });
-                        } else if(statusCode == 400) {
-                            async_for_loop_callback(statusCode);
-                        } else if (statusCode == 409) {
-                            async_for_loop_callback(statusCode);
-                        } // Status code will be added later
-                    } else { // For example, Request Timeout
-                        if(error.code === 'ETIMEDOUT')
-                            async_for_loop_callback(408);
+                }, function (statusCode, n) {
+                    if (statusCode) {
+                        callBackForResponse(statusCode);
+                    } else {
+                        callBackForResponse(201);
                     }
                 });
-            } else {
-                count++;
-                async_for_loop_callback();
-            }
-        },
-        function (statusCode, n) {
-            if (statusCode) {
-                callBackForResponse(statusCode);
-            } else {
-                callBackForResponse(201);
             }
         }
     );

@@ -22,8 +22,8 @@ var RegistrationExecution = function (AEName, callBackForResponse) {
         },
         body: bodyObject
     }, function (error, oneM2MResponse, body) {
-
         if(typeof(oneM2MResponse) !== 'undefined') {
+
             var statusCode = oneM2MResponse.statusCode;
 
             if (statusCode == 201) { // resource creation
@@ -40,6 +40,6 @@ var RegistrationExecution = function (AEName, callBackForResponse) {
     });
 };
 
-exports.AERegistrationExecution = function(AEName, callBackForResponse) {
+exports.CallAERegistrationFunction = function(AEName, callBackForResponse) {
     RegistrationExecution(AEName, callBackForResponse);
 };

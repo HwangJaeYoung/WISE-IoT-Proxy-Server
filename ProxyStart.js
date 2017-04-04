@@ -104,50 +104,62 @@ app.post('/MMGDeviceInfoEndpoint', function(request, response) {
             });
         },
 
-        // oneM2M Registration callback
-        function(detailFiwareDeviceInfo, callbackAboutOneM2MRegistration){
-            oneM2MController.registrationFiwareToOneM2M(detailFiwareDeviceInfo, function (statusCode) {
-                if(statusCode == 201) {
-                    callbackAboutOneM2MRegistration(null, detailFiwareDeviceInfo);
-                } else {
-                    callbackAboutOneM2MRegistration(statusCode, null);
-                }
-            });
-        },
+        // oneM2M Resource registration and subscription
+        function(detailFiwareDeviceInfo, resultCallback) {
 
-        // Fiware Subscription registration
-        function(detailFiwareDeviceInfo, callbackFiwareSubscription){
+            var count = 0;
+            var selectedDevices = detailFiwareDeviceInfo['FiwareDevices']; // Root
+            var deviceInfo = selectedDevices.deviceInfo;
+            var deviceLists = Object.keys(deviceInfo).length;
 
-            fiwareController.executeSubscriptionEntity(detailFiwareDeviceInfo, function (requestResult, statusCode, subscriptionArray) {
+            async.whilst(
+                function () {
+                    return count < deviceLists.length;
+                },
+                function (async_for_loop_callback) {
 
-                if(requestResult) { // success (true)
-                    var count = 0;
-                    async.whilst(
-                        function () {
-                            return count < subscriptionArray.length;
-                        },
-                        function (async_for_loop_callback) {
-                            fs.appendFile('subscriptionList.txt', subscriptionArray[count], function (err) {
-                                if (err) {
-                                    console.log('FATAL An error occurred trying to write in the file: ' + err);
+                    // Resource registration procedures (AE → Container → contentInstance → Subscription)
+                    async.waterfall([
+                        // AE Registration
+                        function(CallbackForAERegistration){
+                            oneM2MController.registrationAE(count, detailFiwareDeviceInfo, function (requestResult, statusCode) {
+                                if(requestResult) { // AE Registration success
+                                    CallbackForAERegistration(null, detailFiwareDeviceInfo);
                                 } else {
-                                    count++; async_for_loop_callback();
+                                    CallbackForAERegistration(statusCode, null); // AE Registration fail
                                 }
                             });
                         },
-                        function (err, n) {
-                            if (err) {
-                                console.log(err);
-                            } else {
-                                console.log('SubscriptionID registration success!!');
-                                callbackFiwareSubscription(201);
-                            }
+
+                        // Container, contentInstance registration
+                        function(detailFiwareDeviceInfo, CallbackForConCinRegistration) {
+                            oneM2MController.registrationConCin(count, detailFiwareDeviceInfo, function (requestResult, statusCode) {
+                                if(requestResult) {
+                                    CallbackForConCinRegistration(null, detailFiwareDeviceInfo);
+                                } else {
+                                    CallbackForConCinRegistration(statusCode, null);
+                                }
+                            });
+                        },
+
+                        // fiware subscription
+                        function(detailFiwareDeviceInfo, CallbackForSubscriptionRegistration) {
+
                         }
-                    );
-                } else { // fail (false)
+                    ], function (statusCode, result) { // response to client such as web or postman
+                        // call async whlist callback
+
+                        if(statusCode) {
+
+                        } else {
+
+                        }
+                    }); // async.waterfall
+                },
+                function (err, n) {
 
                 }
-            });
+            )
         }
     ], function (statusCode, result) { // response to client such as web or postman
         response.status(statusCode).send(statusCodeMessage.statusCodeGenerator(statusCode));

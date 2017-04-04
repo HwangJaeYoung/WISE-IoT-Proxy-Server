@@ -17,5 +17,3 @@ var AEHeaderGeneration = function (AEName) {
 exports.AEHeaderGenerator = function() {
     return AEHeaderGeneration();
 };
-
-// Fiware Header Generator

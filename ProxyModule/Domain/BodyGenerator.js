@@ -34,9 +34,9 @@ var contentInstanceBodyGeneration = function (contentInstanceName) {
     return bodyObject;
 };
 
-var subscriptionBodyGenerator = function (entityName, entityType, deviceInfo) {
+var subscriptionBodyGenerator = function (device) {
     var bodyObject = new Object();
-    var attributeKey = Object.keys(deviceInfo);
+    var attributeKey = Object.keys(device);
     var attributeCount = attributeKey.length;
 
     // Description
@@ -49,8 +49,8 @@ var subscriptionBodyGenerator = function (entityName, entityType, deviceInfo) {
 
     // Subject entities
     var entity = new Object();
-    entity['id'] = entityName;
-    entity['type'] = entityType;
+    entity['id'] = device.entityName;
+    entity['type'] = device.entityType;
     entitiesArray.push(entity);
 
     // Subject condition
@@ -109,6 +109,6 @@ exports.contentInstanceBodyGenerator = function(contentInstanceValue) {
 };
 
 // FIWARE Body Generator
-exports.fiwareSubscriptionBodyGenerator = function (entityName, entityType, deviceInfo) {
-    return subscriptionBodyGenerator(entityName, entityType, deviceInfo);
+exports.fiwareSubscriptionBodyGenerator = function (device) {
+    return subscriptionBodyGenerator(device);
 };

@@ -48,38 +48,21 @@ var iterationEntityQuery = function(fiwareDeviceInfo, fiwareControllerCallback) 
     );
 };
 
-var iterationEntitySubscription = function(fiwareInformation, fiwareControllerCallback) {
-    var count = 0;
+var iterationEntitySubscription = function(count, fiwareDeviceInfo, fiwareControllerCallback) {
 
-    var selectedDevices = fiwareInformation['FiwareDevices']; // Root
+    var selectedDevices = fiwareDeviceInfo['FiwareDevices']; // Root
     var deviceInfo = selectedDevices.deviceInfo;
-    var deviceLists = Object.keys(deviceInfo).length;
+    var deviceKey = [Object.keys(deviceInfo)[count]]; // device1, device2, ... , deviceN
+    var device = deviceInfo[deviceKey];
 
-    var subscriptionIDCollector = new Array();
-
-    async.whilst(
-        function () { return count < deviceLists; },
-
-        function (async_for_loop_callback) {
-            subFiwareDeviceController.subFiwareDevice(deviceInfo[Object.keys(deviceInfo)[count]].entityName, deviceInfo[Object.keys(deviceInfo)[count]].entityType, deviceInfo[Object.keys(deviceInfo)[count]], function(statusCode, subscriptionID) {
-                // Checking for iteration
-                if(statusCode == 201) { // request success
-                    subscriptionIDCollector.push(subscriptionID + '\n');
-                    count++; async_for_loop_callback(null, count);
-                } else { // request fail
-                    async_for_loop_callback(statusCode); // calling error function
-                }
-            });
-        },
-        function (statusCode, n) {
-            if (statusCode) {
-                fiwareControllerCallback(false, statusCode, null);
-            } else {
-                console.log("Fiware Device Subscription is finished");
-                fiwareControllerCallback(true, statusCode, subscriptionIDCollector);
-            }
+    subFiwareDeviceController.subFiwareDevice(device, function(statusCode, subscriptionID) {
+        // Checking for iteration
+        if(statusCode == 201) { // request success
+            fiwareControllerCallback(true, statusCode, subscriptionID + '\n');
+        } else { // request fail
+            fiwareControllerCallback(false, statusCode, null);
         }
-    );
+    })
 };
 
 var iterationEntityUnsubscription = function(subscriptionIDArray, fiwareControllerCallback) {
@@ -87,7 +70,7 @@ var iterationEntityUnsubscription = function(subscriptionIDArray, fiwareControll
     var count = 0;
 
     async.whilst(
-        function () { return count < subscriptionIDArray.length; },
+        function () { return count < subscriptionIDArray.length - 1; },
 
         function (async_for_loop_callback) {
             // Checking for iteration
@@ -115,8 +98,8 @@ exports.executeQueryEntity = function(fiwareDeviceInfo, fiwareControllerCallback
     iterationEntityQuery(fiwareDeviceInfo, fiwareControllerCallback);
 };
 
-exports.executeSubscriptionEntity = function (detailFiwareDeviceInfo, fiwareControllerCallback) {
-    iterationEntitySubscription(detailFiwareDeviceInfo, fiwareControllerCallback);
+exports.executeSubscriptionEntity = function (count, fiwareDeviceInfo, fiwareControllerCallback) {
+    iterationEntitySubscription(count, fiwareDeviceInfo, fiwareControllerCallback);
 };
 
 exports.executeUnsubscriptionEntity = function (subscriptionIDArray, fiwareControllerCallback) {

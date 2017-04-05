@@ -72,6 +72,8 @@ fs.readFile('conf.json', 'utf-8', function (err, data) {
 
 // Fiware Subscription endpoint
 app.post('/FiwareNotificationEndpoint', function(request, response) {
+
+    console.log("in notification message");
     oneM2MController.updateFiwareToOneM2M(request.body, function (requestResult, statusCode) {
         // In this function we don't use requestResult
         console.log(statusCodeMessage.statusCodeGenerator(statusCode));
@@ -125,8 +127,8 @@ app.post('/MMGDeviceInfoEndpoint', function(request, response) {
                             oneM2MController.registrationAE(count, detailFiwareDeviceInfo, function (requestResult, statusCode) {
                                 if(requestResult) { // AE Registration success
                                     CallbackForAERegistration(null, detailFiwareDeviceInfo);
-                                } else {
-                                    CallbackForAERegistration(statusCode, null); // AE Registration fail
+                                } else { // AE Registration fail
+                                    CallbackForAERegistration(statusCode, null);
                                 }
                             });
                         },
@@ -142,17 +144,25 @@ app.post('/MMGDeviceInfoEndpoint', function(request, response) {
                             });
                         },
 
-                        /*
-                        // fiware subscription
+                        // Fiware subscription
                         function(detailFiwareDeviceInfo, CallbackForSubscriptionRegistration) {
-                            fiwareController.executeSubscriptionEntity(detailFiwareDeviceInfo, function (requestResult, statusCode) {
-                                if(requestResult) {
-                                    CallbackForSubscriptionRegistration(null, detailFiwareDeviceInfo);
-                                } else {
+                            fiwareController.executeSubscriptionEntity(count, detailFiwareDeviceInfo, function (requestResult, statusCode, subscriptionID) {
+                                if(requestResult) { // Subscription Registration success
+
+                                    fs.appendFile('subscriptionList.txt', subscriptionID, function (err) {
+                                        if (err)
+                                            console.log('FATAL An error occurred trying to write in the file: ' + err);
+                                        else {
+
+                                        }
+                                    });
+
+                                    CallbackForSubscriptionRegistration(null);
+                                } else { // Subscription Registration fail
                                     CallbackForSubscriptionRegistration(statusCode, null);
                                 }
                             })
-                        }*/
+                        }
                     ], function (statusCode, result) { // response to client such as web or postman
                         if(statusCode) { // AE → Container → contentInstance → Subscription (fail)
                             async_for_loop_callback(statusCode); // fail

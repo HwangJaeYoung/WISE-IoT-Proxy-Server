@@ -5,10 +5,10 @@
 var requestToAnotherServer = require('request');
 var bodyGenerator = require('../Domain/BodyGenerator');
 
-var subscriptionFiwareDevice = function (entityName, entityType, deviceInfo, fiwareCallback) {
+var subscriptionFiwareDevice = function (device, fiwareCallback) {
 
     var targetURL = fiwareIP + '/v2/subscriptions';
-    var bodyObject = bodyGenerator.fiwareSubscriptionBodyGenerator(entityName, entityType, deviceInfo);
+    var bodyObject = bodyGenerator.fiwareSubscriptionBodyGenerator(device);
 
     // Request for subscribing fiware device information from ContextBroker (Subscription Entity)
     requestToAnotherServer( { url : targetURL,
@@ -39,6 +39,6 @@ var subscriptionFiwareDevice = function (entityName, entityType, deviceInfo, fiw
     });
 };
 
-exports.subFiwareDevice = function(entityName, entityType, deviceInfo, fiwareCallback) {
-    subscriptionFiwareDevice(entityName, entityType, deviceInfo, fiwareCallback);
+exports.subFiwareDevice = function(device, fiwareCallback) {
+    subscriptionFiwareDevice(device, fiwareCallback);
 };

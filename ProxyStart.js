@@ -72,8 +72,6 @@ fs.readFile('conf.json', 'utf-8', function (err, data) {
 
 // Fiware Subscription endpoint
 app.post('/FiwareNotificationEndpoint', function(request, response) {
-
-    console.log("in notification message");
     oneM2MController.updateFiwareToOneM2M(request.body, function (requestResult, statusCode) {
         // In this function we don't use requestResult
         console.log(statusCodeMessage.statusCodeGenerator(statusCode));
@@ -165,7 +163,11 @@ app.post('/MMGDeviceInfoEndpoint', function(request, response) {
                         }
                     ], function (statusCode, result) { // response to client such as web or postman
                         if(statusCode) { // AE → Container → contentInstance → Subscription (fail)
-                            async_for_loop_callback(statusCode); // fail
+                            if(statusCode == 409) { // AE Registration Conflict
+                                count++; async_for_loop_callback();
+                            } else {
+                                async_for_loop_callback(statusCode); // fail
+                            }
                         } else { // AE → Container → contentInstance → Subscription (success)
                             count++; async_for_loop_callback();
                         }

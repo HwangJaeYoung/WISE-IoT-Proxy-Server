@@ -119,6 +119,6 @@ exports.executeSubscriptionEntity = function (detailFiwareDeviceInfo, fiwareCont
     iterationEntitySubscription(detailFiwareDeviceInfo, fiwareControllerCallback);
 };
 
-exports.executeUnsubscriptionEntity = function (subscriptionID, fiwareControllerCallback) {
-    iterationEntityUnsubscription(subscriptionID, fiwareControllerCallback);
+exports.executeUnsubscriptionEntity = function (subscriptionIDArray, fiwareControllerCallback) {
+    iterationEntityUnsubscription(subscriptionIDArray, fiwareControllerCallback);
 };

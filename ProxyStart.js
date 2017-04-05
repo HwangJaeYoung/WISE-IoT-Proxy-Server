@@ -102,7 +102,7 @@ app.post('/MMGDeviceInfoEndpoint', function(request, response) {
                     callbackForOneM2M(statusCode, null);
                 }
             });
-        },
+        }, // Fiware resource retrieve
 
         // oneM2M Resource registration and subscription
         function(detailFiwareDeviceInfo, resultCallback) {
@@ -114,7 +114,7 @@ app.post('/MMGDeviceInfoEndpoint', function(request, response) {
 
             async.whilst(
                 function () {
-                    return count < deviceLists.length;
+                    return count < deviceLists;
                 },
                 function (async_for_loop_callback) {
 
@@ -142,6 +142,7 @@ app.post('/MMGDeviceInfoEndpoint', function(request, response) {
                             });
                         },
 
+                        /*
                         // fiware subscription
                         function(detailFiwareDeviceInfo, CallbackForSubscriptionRegistration) {
                             fiwareController.executeSubscriptionEntity(detailFiwareDeviceInfo, function (requestResult, statusCode) {
@@ -151,23 +152,26 @@ app.post('/MMGDeviceInfoEndpoint', function(request, response) {
                                     CallbackForSubscriptionRegistration(statusCode, null);
                                 }
                             })
-                        }
+                        }*/
                     ], function (statusCode, result) { // response to client such as web or postman
-                        // call async whlist callback
-
-                        if(statusCode) {
-
-                        } else {
-
+                        if(statusCode) { // AE → Container → contentInstance → Subscription (fail)
+                            async_for_loop_callback(statusCode); // fail
+                        } else { // AE → Container → contentInstance → Subscription (success)
+                            count++; async_for_loop_callback();
                         }
                     }); // async.waterfall
                 },
-                function (err, n) {
-
+                function (statusCode, n) {
+                    if(statusCode) {
+                        resultCallback(statusCode); // fail
+                    } else {
+                        resultCallback(201); // success
+                    }
                 }
-            )
-        }
+            );
+        } // oneM2M Registration function
     ], function (statusCode, result) { // response to client such as web or postman
+        console.log(statusCodeMessage.statusCodeGenerator((statusCode)));
         response.status(statusCode).send(statusCodeMessage.statusCodeGenerator(statusCode));
     });
 });

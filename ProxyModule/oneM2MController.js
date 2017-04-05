@@ -29,9 +29,15 @@ var executeRegistrationConCin = function(count, fiwareInformation, oneM2MControl
 
     var selectedDevices = fiwareInformation['FiwareDevices']; // Root
     var deviceInfo = selectedDevices.deviceInfo;
+    var device = [Object.keys(deviceInfo)[count]];
+
+    // Getting device attributes such as entityName, temperature, pressure and so on.
+    var attributeKey = Object.keys(device);
+    var attributeCount = attributeKey.length;
 
     // Creating AE name using Entity Name and Entity Type.
-    var AEName = deviceInfo[Object.keys(deviceInfo)[count]].entityName + ":" + deviceInfo[Object.keys(deviceInfo)[count]].entityType;
+    var AEName = device.entityName + ":" + device.entityType;
+    console.log(AEName);
 
     async.whilst(
         function () {
@@ -40,27 +46,48 @@ var executeRegistrationConCin = function(count, fiwareInformation, oneM2MControl
 
         function (async_for_loop_callback) {
 
-            async.waterfall([
+            if ((attributeKey[attrCount] == 'entityName' || attributeKey[attrCount] == 'entityType') == false) {
+                async.waterfall([
+                    // Container Registration
+                    function (callbackForOneM2M) {
+                        var containerName = attributeKey[attrCount]; // container name
+                        containerRegistration.ContainerRegistrationExecution(AEName, containerName, function (statusCode) {
+                            if(statusCode == 201)
+                                callbackForOneM2M(null);
+                            else
+                                callbackForOneM2M(statusCode, null);
+                        });
+                    },
 
-                // Container Registration
-                function(callbackForOneM2M){
-                    oneM2MController.registrationContainer(count, deviceInfo, function (requestResult, statusCode) {
-
-                    });
-                },
-
-                // contentInstance Registration
-                function(detailFiwareDeviceInfo, resultCallback) {
-                    oneM2MController.registrationContentInstance(count, detailFiwareDeviceInfo, function (requestResult, statusCode) {
-
-                    });
-                }
-            ], function (statusCode, result) { // response to client such as web or postman
-
-            });
+                    // contentInstance Registration
+                    function (callbackForOneM2M) {
+                        var containerName = attributeKey[attrCount]; // container name
+                        var contentInstanceValue = deviceInfo[attributeKey[count]].value;// contentInstance value
+                        contentInstanceRegistration.contentInstanceRegistrationExecution(AEName, containerName, contentInstanceValue, function (statusCode) {
+                            if(statusCode == 201)
+                                callbackForOneM2M(null);
+                            else
+                                callbackForOneM2M(statusCode, null);
+                        });
+                    }
+                ], function (statusCode, result) { // response to client such as web or postman
+                    if(statusCode) {
+                        async_for_loop_callback(statusCode); // error case
+                    } else {
+                        attrCount++; async_for_loop_callback();
+                    }
+                });
+            } else {
+                attrCount++; async_for_loop_callback();
+            }
         },
         function (statusCode, n) {
-
+            if (statusCode) {
+                oneM2MControllerCallback(false, statusCode);
+            } else {
+                console.log("oneM2M resource registration is finished");
+                oneM2MControllerCallback(true, statusCode);
+            }
         }
     );
 };

@@ -2,55 +2,44 @@
  * Created by JaeYoungHwang on 2017-03-03.
  */
 
-var async = require('async');
 var requestToAnotherServer = require('request');
 var bodyGenerator = require('../Domain/BodyGenerator');
-var contentInstanceRegistration = require('./contentInsatnceRegistration');
 
-var RegistrationExecution = function (AEName, deviceInfo, callBackForResponse) {
+var RegistrationExecution = function (AEName, containerName, callBackForResponse) {
 
-    var selectedDevices = fiwareInformation['FiwareDevices']; // Root
-    var deviceInfo = selectedDevices.deviceInfo;
+    var targetURL = yellowTurtleIP + '/mobius-yt/' + AEName;
+    var bodyObject = bodyGenerator.ContainerBodyGenerator(containerName);
 
-    var count = 0;
-    var attributeKey = Object.keys(deviceInfo);
-    var attributeCount = attributeKey.length;
-
-    async.whilst(
-        function () {
-            return count < attributeCount;
+    requestToAnotherServer({
+        url: targetURL,
+        method: 'POST',
+        json: true,
+        headers: { // Basic AE resource structure for registration
+            'Accept': 'application/json',
+            'X-M2M-RI': '12345',
+            'X-M2M-Origin': 'Origin',
+            'Content-Type': 'application/vnd.onem2m-res+json; ty=3',
         },
+        body: bodyObject
+    }, function (error, oneM2MResponse, body) {
+        if(typeof(oneM2MResponse) !== 'undefined') {
 
-        function (async_for_loop_callback) {
+            var statusCode = oneM2MResponse.statusCode;
 
-            if ((attributeKey[count] == 'entityName' || attributeKey[count] == 'entityType') == false) {
-                var targetURL = yellowTurtleIP + '/mobius-yt/' + AEName;
-                var containerName = attributeKey[count];
-                var bodyObject = bodyGenerator.ContainerBodyGenerator(containerName);
-
-                requestToAnotherServer({
-                    url: targetURL,
-                    method: 'POST',
-                    json: true,
-                    headers: { // Basic AE resource structure for registration
-                        'Accept': 'application/json',
-                        'X-M2M-RI': '12345',
-                        'X-M2M-Origin': 'Origin',
-                        'Content-Type': 'application/vnd.onem2m-res+json; ty=3',
-                    },
-                    body: bodyObject
-                }, function (statusCode, n) {
-                    if (statusCode) {
-                        callBackForResponse(statusCode);
-                    } else {
-                        callBackForResponse(201);
-                    }
-                });
-            }
+            if (statusCode == 201) { // resource creation
+                callBackForResponse(statusCode); // Callback method for sending QueryEntity result to FiwareController
+            } else if(statusCode == 400) { // bad request
+                callBackForResponse(statusCode);
+            } else if (statusCode == 409) { // resource conflict error
+                callBackForResponse(statusCode);
+            } // Status code will be added later
+        } else { // For example, Request Timeout
+            if(error.code === 'ETIMEDOUT') // request timeout
+                callBackForResponse(408);
         }
-    );
+    });
 };
 
-exports.ContainerRegistrationExecution = function(AEName, deviceInfo, callBackForResponse) {
-    RegistrationExecution(AEName, deviceInfo, callBackForResponse);
+exports.ContainerRegistrationExecution = function(AEName, containerName, callBackForResponse) {
+    RegistrationExecution(AEName, containerName, callBackForResponse);
 };

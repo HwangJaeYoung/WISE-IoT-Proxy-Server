@@ -144,7 +144,13 @@ app.post('/MMGDeviceInfoEndpoint', function(request, response) {
 
                         // fiware subscription
                         function(detailFiwareDeviceInfo, CallbackForSubscriptionRegistration) {
-
+                            fiwareController.executeSubscriptionEntity(detailFiwareDeviceInfo, function (requestResult, statusCode) {
+                                if(requestResult) {
+                                    CallbackForSubscriptionRegistration(null, detailFiwareDeviceInfo);
+                                } else {
+                                    CallbackForSubscriptionRegistration(statusCode, null);
+                                }
+                            })
                         }
                     ], function (statusCode, result) { // response to client such as web or postman
                         // call async whlist callback

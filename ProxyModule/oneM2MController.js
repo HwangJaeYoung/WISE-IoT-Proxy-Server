@@ -29,7 +29,8 @@ var executeRegistrationConCin = function(count, fiwareInformation, oneM2MControl
 
     var selectedDevices = fiwareInformation['FiwareDevices']; // Root
     var deviceInfo = selectedDevices.deviceInfo;
-    var device = [Object.keys(deviceInfo)[count]];
+    var deviceKey = [Object.keys(deviceInfo)[count]]; // device1, device2, ... , deviceN
+    var device = deviceInfo[deviceKey];
 
     // Getting device attributes such as entityName, temperature, pressure and so on.
     var attributeKey = Object.keys(device);
@@ -37,7 +38,6 @@ var executeRegistrationConCin = function(count, fiwareInformation, oneM2MControl
 
     // Creating AE name using Entity Name and Entity Type.
     var AEName = device.entityName + ":" + device.entityType;
-    console.log(AEName);
 
     async.whilst(
         function () {
@@ -50,7 +50,7 @@ var executeRegistrationConCin = function(count, fiwareInformation, oneM2MControl
                 async.waterfall([
                     // Container Registration
                     function (callbackForOneM2M) {
-                        var containerName = attributeKey[attrCount]; // container name
+                        var containerName = attributeKey[attrCount]; // Container Name
                         containerRegistration.ContainerRegistrationExecution(AEName, containerName, function (statusCode) {
                             if(statusCode == 201)
                                 callbackForOneM2M(null);
@@ -61,8 +61,8 @@ var executeRegistrationConCin = function(count, fiwareInformation, oneM2MControl
 
                     // contentInstance Registration
                     function (callbackForOneM2M) {
-                        var containerName = attributeKey[attrCount]; // container name
-                        var contentInstanceValue = deviceInfo[attributeKey[count]].value;// contentInstance value
+                        var containerName = attributeKey[attrCount]; // Container Name
+                        var contentInstanceValue = device[attributeKey[attrCount]].value;// contentInstance value
                         contentInstanceRegistration.contentInstanceRegistrationExecution(AEName, containerName, contentInstanceValue, function (statusCode) {
                             if(statusCode == 201)
                                 callbackForOneM2M(null);

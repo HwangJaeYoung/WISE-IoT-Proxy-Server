@@ -105,7 +105,7 @@ app.post('/MMGDeviceInfoEndpoint', function(request, response) {
         }, // Fiware resource retrieve
 
         // oneM2M Resource registration and subscription
-        /*function(detailFiwareDeviceInfo, resultCallback) {
+        function(detailFiwareDeviceInfo, resultCallback) {
 
             var count = 0;
             var selectedDevices = detailFiwareDeviceInfo['FiwareDevices']; // Root
@@ -181,7 +181,7 @@ app.post('/MMGDeviceInfoEndpoint', function(request, response) {
                     }
                 }
             );
-        } // oneM2M Registration function*/
+        } // oneM2M Registration function
     ], function (statusCode, result) { // response to client such as web or postman
         console.log(statusCodeMessage.statusCodeGenerator((statusCode)));
         response.status(statusCode).send(statusCodeMessage.statusCodeGenerator(statusCode));

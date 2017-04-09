@@ -60,6 +60,56 @@ var executeRegistrationConCin = function(count, fiwareInformation, oneM2MControl
                         });
                     },
 
+                    // If attributes have metadata...
+                    function (callbackForOneM2M) {
+                        var metadataCount = 0;
+                        var containerName = attributeKey[attrCount]; // Container Name
+                        var metadataSet = device[attributeKey[attrCount]].metadata;
+                        var metadataKey = Object.keys(metadataSet);
+
+                        async.whilst(
+                            function () { return metadataCount < metadataSet.length; },
+
+                            // Creating metadata resource using double Container structure
+                            function (async_for_loop_callback) {
+                                async.waterfall([
+
+                                    // Creating Container resource for metadata
+                                    function(callbackForOneM2M) {
+                                        var containerName = attributeKey[attrCount]; // Container Name
+                                        var metadataName = metadataKey[metadataCount];
+
+                                        containerRegistration.ContainerRegistrationExecution(AEName, containerName, function (statusCode) {
+                                            if(statusCode == 201)
+                                                callbackForOneM2M(null);
+                                            else
+                                                callbackForOneM2M(statusCode, null);
+                                        });
+                                    },
+
+                                    // Creating contentInstance resource for metadata value
+                                    function(detailFiwareDeviceInfo, resultCallback) {
+                                        var containerName = attributeKey[attrCount]; // Container Name
+                                        var metadataName = metadataKey[metadataCount];
+                                        var metadataValue = metadataSet[attributeKey[attrCount]].value;// contentInstance value
+
+                                        contentInstanceRegistration.contentInstanceRegistrationExecution(AEName, containerName, contentInstanceValue, function (statusCode) {
+                                            if(statusCode == 201)
+                                                callbackForOneM2M(null);
+                                            else
+                                                callbackForOneM2M(statusCode, null);
+                                        });
+                                    }
+                                ], function (statusCode, result) {
+
+                                });
+                            },
+                            function (statusCode, n) {
+
+                            }
+                        ); // End of async.whilist
+                    },
+
                     // contentInstance Registration
                     function (callbackForOneM2M) {
                         var containerName = attributeKey[attrCount]; // Container Name
@@ -117,7 +167,6 @@ var fiwareDeviceUpdateForOneM2M = function(fiwareInformation, oneM2MControllerCa
                 var contentInstanceValue = attributeOrigin[attributeList[count]].value;
 
                 contentInstanceRegistration.contentInstanceRegistrationExecution(AEName, containerName, contentInstanceValue, function (statusCode) {
-
                     if(statusCode == 201) {
                         count++; async_for_loop_callback(null, count);
                     } else {

@@ -30,9 +30,33 @@ var gettingDeviceInfo = function (EntityName, EntityType, fiwareCallback) {
 
                 // Adding fiware device parameters respectively
                 for(var i = 0; i < attrResult.length; i++) {
-                    var valueObject = new Object();
-                    valueObject.value =  deviceAttrData[attrResult[i]].value;
-                    resultObject[attrResult[i]] = valueObject;
+
+                    // Getting metadata information from attributes
+                    var metadata = deviceAttrData[attrResult[i]].metadata;
+
+                    if(metadata) { // If metadata exist...
+                        var attrInfoObject = new Object();
+
+                        var metadataKey = Object.keys(metadata);
+                        var metadataLength = metadataKey.length;
+                        var metadataSet = new Object();
+
+                        for(var j = 0; j < metadataLength; j++) {
+                            metadataSet[metadataKey[j]] = metadata[metadataKey[j]].value;
+                        }
+
+                        // Adding attribute value and metadataSet
+                        attrInfoObject.value =  deviceAttrData[attrResult[i]].value;
+                        attrInfoObject.metadata = metadataSet;
+
+                        // Make attribute by Merging attribute value and metadataSet
+                        resultObject[attrResult[i]] = attrInfoObject;
+
+                    } else { // If not...
+                        var valueObject = new Object();
+                        valueObject.value =  deviceAttrData[attrResult[i]].value;
+                        resultObject[attrResult[i]] = valueObject;
+                    }
                 }
                 fiwareCallback(statusCode, resultObject); // Callback method for sending QueryEntity result to FiwareController
             } else if (statusCode == 404) { // resource not found

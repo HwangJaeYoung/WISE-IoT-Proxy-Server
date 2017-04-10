@@ -52,7 +52,7 @@ var executeRegistrationConCin = function(count, fiwareInformation, oneM2MControl
                     // Container Registration
                     function (callbackForOneM2M) {
                         var containerName = attributeKey[attrCount]; // Container Name
-                        containerRegistration.ContainerRegistrationExecution(AEName, containerName, function (statusCode) {
+                        containerRegistration.ContainerRegistrationExecution(AEName, containerName, null, function (statusCode) {
                             if(statusCode == 201)
                                 callbackForOneM2M(null);
                             else
@@ -63,7 +63,6 @@ var executeRegistrationConCin = function(count, fiwareInformation, oneM2MControl
                     // If attributes have metadata...
                     function (callbackForOneM2M) {
                         var metadataCount = 0;
-                        var containerName = attributeKey[attrCount]; // Container Name
                         var metadataSet = device[attributeKey[attrCount]].metadata;
                         var metadataKey = Object.keys(metadataSet);
 
@@ -79,7 +78,7 @@ var executeRegistrationConCin = function(count, fiwareInformation, oneM2MControl
                                         var containerName = attributeKey[attrCount]; // Container Name
                                         var metadataName = metadataKey[metadataCount];
 
-                                        containerRegistration.ContainerRegistrationExecution(AEName, containerName, function (statusCode) {
+                                        containerRegistration.ContainerRegistrationExecution(AEName, containerName, metadataName, function (statusCode) {
                                             if(statusCode == 201)
                                                 callbackForOneM2M(null);
                                             else
@@ -93,7 +92,7 @@ var executeRegistrationConCin = function(count, fiwareInformation, oneM2MControl
                                         var metadataName = metadataKey[metadataCount];
                                         var metadataValue = metadataSet[attributeKey[attrCount]].value;// contentInstance value
 
-                                        contentInstanceRegistration.contentInstanceRegistrationExecution(AEName, containerName, contentInstanceValue, function (statusCode) {
+                                        contentInstanceRegistration.contentInstanceRegistrationExecution(AEName, containerName, metadataName, metadataValue, function (statusCode) {
                                             if(statusCode == 201)
                                                 callbackForOneM2M(null);
                                             else
@@ -101,11 +100,23 @@ var executeRegistrationConCin = function(count, fiwareInformation, oneM2MControl
                                         });
                                     }
                                 ], function (statusCode, result) {
-
-                                });
+                                    if(statusCode) {
+                                        if(statusCode == 409) { // Container Registration Conflict
+                                            attrCount++; async_for_loop_callback();
+                                        } else {
+                                            async_for_loop_callback(statusCode); // fail
+                                        }
+                                    } else {
+                                        attrCount++; async_for_loop_callback();
+                                    }
+                                }); // End of async.waterfall
                             },
                             function (statusCode, n) {
-
+                                if(statusCode) {
+                                    callbackForOneM2M(statusCode, null); // fail
+                                } else {
+                                    callbackForOneM2M(null); // success
+                                }
                             }
                         ); // End of async.whilist
                     },
@@ -114,7 +125,7 @@ var executeRegistrationConCin = function(count, fiwareInformation, oneM2MControl
                     function (callbackForOneM2M) {
                         var containerName = attributeKey[attrCount]; // Container Name
                         var contentInstanceValue = device[attributeKey[attrCount]].value;// contentInstance value
-                        contentInstanceRegistration.contentInstanceRegistrationExecution(AEName, containerName, contentInstanceValue, function (statusCode) {
+                        contentInstanceRegistration.contentInstanceRegistrationExecution(AEName, containerName, null, contentInstanceValue, function (statusCode) {
                             if(statusCode == 201)
                                 callbackForOneM2M(null);
                             else

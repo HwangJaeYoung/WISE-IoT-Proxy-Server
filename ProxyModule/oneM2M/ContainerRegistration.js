@@ -5,10 +5,17 @@
 var requestToAnotherServer = require('request');
 var bodyGenerator = require('../Domain/BodyGenerator');
 
-var RegistrationExecution = function (AEName, containerName, callBackForResponse) {
+var RegistrationExecution = function (AEName, containerName, metadataName, callBackForResponse) {
 
-    var targetURL = yellowTurtleIP + '/mobius-yt/' + AEName;
-    var bodyObject = bodyGenerator.ContainerBodyGenerator(containerName);
+    var targetURL = '', bodyObject = null;
+
+    if(metadataName) { // Double Container format
+        targetURL = yellowTurtleIP + '/mobius-yt/' + AEName + '/' + containerName;
+        bodyObject = bodyGenerator.ContainerBodyGenerator(metadataName);
+    } else { // General Container format
+        targetURL = yellowTurtleIP + '/mobius-yt/' + AEName;
+        bodyObject = bodyGenerator.ContainerBodyGenerator(containerName);
+    }
 
     requestToAnotherServer({
         url: targetURL,
@@ -18,7 +25,7 @@ var RegistrationExecution = function (AEName, containerName, callBackForResponse
             'Accept': 'application/json',
             'X-M2M-RI': '12345',
             'X-M2M-Origin': 'Origin',
-            'Content-Type': 'application/vnd.onem2m-res+json; ty=3',
+            'Content-Type': 'application/vnd.onem2m-res+json; ty=3'
         },
         body: bodyObject
     }, function (error, oneM2MResponse, body) {
@@ -40,6 +47,6 @@ var RegistrationExecution = function (AEName, containerName, callBackForResponse
     });
 };
 
-exports.ContainerRegistrationExecution = function(AEName, containerName, callBackForResponse) {
-    RegistrationExecution(AEName, containerName, callBackForResponse);
+exports.ContainerRegistrationExecution = function(AEName, containerName, metadataName, callBackForResponse) {
+    RegistrationExecution(AEName, containerName, metadataName, callBackForResponse);
 };

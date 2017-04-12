@@ -67,7 +67,7 @@ var executeRegistrationConCin = function(count, fiwareInformation, oneM2MControl
                         var metadataKey = Object.keys(metadataSet);
 
                         async.whilst(
-                            function () { return metadataCount < metadataSet.length; },
+                            function () { return metadataCount < metadataKey.length; },
 
                             // Creating metadata resource using double Container structure
                             function (async_for_loop_callback) {
@@ -87,10 +87,10 @@ var executeRegistrationConCin = function(count, fiwareInformation, oneM2MControl
                                     },
 
                                     // Creating contentInstance resource for metadata value
-                                    function(detailFiwareDeviceInfo, resultCallback) {
+                                    function(callbackForOneM2M) {
                                         var containerName = attributeKey[attrCount]; // Container Name
                                         var metadataName = metadataKey[metadataCount];
-                                        var metadataValue = metadataSet[attributeKey[attrCount]].value;// contentInstance value
+                                        var metadataValue = metadataSet[metadataKey[metadataCount]];// contentInstance value
 
                                         contentInstanceRegistration.contentInstanceRegistrationExecution(AEName, containerName, metadataName, metadataValue, function (statusCode) {
                                             if(statusCode == 201)
@@ -102,12 +102,12 @@ var executeRegistrationConCin = function(count, fiwareInformation, oneM2MControl
                                 ], function (statusCode, result) {
                                     if(statusCode) {
                                         if(statusCode == 409) { // Container Registration Conflict
-                                            attrCount++; async_for_loop_callback();
+                                            metadataCount++; async_for_loop_callback();
                                         } else {
                                             async_for_loop_callback(statusCode); // fail
                                         }
                                     } else {
-                                        attrCount++; async_for_loop_callback();
+                                        metadataCount++; async_for_loop_callback();
                                     }
                                 }); // End of async.waterfall
                             },

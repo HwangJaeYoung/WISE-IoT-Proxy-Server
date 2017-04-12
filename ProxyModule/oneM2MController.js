@@ -129,10 +129,10 @@ var executeRegistrationConCin = function(count, fiwareInformation, oneM2MControl
 
                         var contentInstanceValue = '';
 
-                        if(findingLocationType == 'get:json') {
+                        if(findingLocationType == 'geo:json') {
                             var Location = device[attributeKey[attrCount]].value;
                             var coordinates = Location.coordinates;
-                            contentInstanceValue = coordinates[0] + " : " + coordinates[1];
+                            contentInstanceValue = coordinates[0] + ":" + coordinates[1];
                         } else {
                             contentInstanceValue = device[attributeKey[attrCount]].value;// contentInstance value
                         }

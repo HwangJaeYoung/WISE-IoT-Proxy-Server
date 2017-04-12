@@ -1,5 +1,6 @@
 /**
  * Created by JaeYoungHwang on 2017-03-29.
+ * forest62590@gmail.com
  */
 
 var getStatusCodeMessage = function(statusCode) {

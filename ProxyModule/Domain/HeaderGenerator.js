@@ -1,5 +1,6 @@
 /**
  * Created by JaeYoungHwang on 2017-03-10.
+ * forest62590@gmail.com
  */
 
 var AEHeaderGeneration = function (AEName) {

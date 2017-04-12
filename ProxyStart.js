@@ -96,6 +96,9 @@ app.post('/MMGDeviceInfoEndpoint', function(request, response) {
         // Get Fiware device information
         function(callbackForOneM2M){
             fiwareController.executeQueryEntity(fiwareDeviceInfo, function (requestResult, statusCode, detailFiwareDeviceInfo) {
+
+                console.log(JSON.stringify(detailFiwareDeviceInfo));
+
                 if (requestResult) { // success (true)
                     callbackForOneM2M(null, detailFiwareDeviceInfo);
                 } else { // fail (false)

@@ -123,8 +123,20 @@ var executeRegistrationConCin = function(count, fiwareInformation, oneM2MControl
 
                     // contentInstance Registration
                     function (callbackForOneM2M) {
+                        // If FIWARE resource has Location Information...
                         var containerName = attributeKey[attrCount]; // Container Name
-                        var contentInstanceValue = device[attributeKey[attrCount]].value;// contentInstance value
+                        var findingLocationType = device[attributeKey[attrCount]].type;
+
+                        var contentInstanceValue = '';
+
+                        if(findingLocationType == 'get:json') {
+                            var Location = device[attributeKey[attrCount]].value;
+                            var coordinates = Location.coordinates;
+                            contentInstanceValue = coordinates[0] + " : " + coordinates[1];
+                        } else {
+                            contentInstanceValue = device[attributeKey[attrCount]].value;// contentInstance value
+                        }
+
                         contentInstanceRegistration.contentInstanceRegistrationExecution(AEName, containerName, null, contentInstanceValue, function (statusCode) {
                             if(statusCode == 201)
                                 callbackForOneM2M(null);

@@ -173,32 +173,91 @@ var executeRegistrationConCin = function(count, fiwareInformation, oneM2MControl
 
 var fiwareDeviceUpdateForOneM2M = function(fiwareInformation, oneM2MControllerCallback) {
 
-    var attributeOrigin = fiwareInformation['data'][0]; // Root
-    var attributeList = Object.keys(attributeOrigin);
-    var attributeNumber = Object.keys(attributeOrigin).length;
+    var attrCount = 0; // Initialization for counting
 
-    var count = 0; // Initialization for counting
+    var attributeOrigin = fiwareInformation['data'][0]; // Root
+    var attributeKeys = Object.keys(attributeOrigin);
+    var attributeNumber = attributeKeys.length;
 
     async.whilst(
-        function () { return count < attributeNumber; },
+        function () { return attrCount < attributeNumber; },
 
         function (async_for_loop_callback) {
             // Creating AE name using Entity Name and Entity Type.
             var AEName = attributeOrigin.id + ":" + attributeOrigin.type;
 
-            if ((attributeList[count] == 'id' || attributeList[count] == 'type') == false) {
-                var containerName = attributeList[count];
-                var contentInstanceValue = attributeOrigin[attributeList[count]].value;
+            if ((attributeKeys[attrCount] == 'id' || attributeKeys[attrCount] == 'type') == false) {
+                async.waterfall([
+                    function(CallbackForNotification){
+                        var metadataCount = 0;
+                        var metadataSet = attributeOrigin[attributeKeys[attrCount]].metadata;
+                        var metadataKey = Object.keys(metadataSet);
+                        var findingLocationType = '';
 
-                contentInstanceRegistration.contentInstanceRegistrationExecution(AEName, containerName, contentInstanceValue, function (statusCode) {
-                    if(statusCode == 201) {
-                        count++; async_for_loop_callback(null, count);
-                    } else {
-                        async_for_loop_callback(statusCode);
+                        if(metadataKey.length)
+                            findingLocationType = attributeOrigin[attributeKeys[attrCount]].type;
+
+                        if(metadataKey.length && findingLocationType != 'geo:json') { // if metadata exist...
+                            async.whilst(
+                                function () { return metadataCount < metadataKey.length; },
+
+                                function (async_for_loop_callback) {
+                                    var containerName = attributeKeys[attrCount]; // Container Name
+                                    var metadataName = metadataKey[metadataCount]; // 2nd Container Name
+                                    var metadataValue = metadataSet[metadataKey[metadataCount]].value; // contentInstance value
+
+                                    contentInstanceRegistration.contentInstanceRegistrationExecution(AEName, containerName, metadataName, metadataValue, function (statusCode) {
+                                        if (statusCode == 201) {
+                                            metadataCount++; async_for_loop_callback();
+                                        } else
+                                            async_for_loop_callback(statusCode, null);
+                                    });
+                                },
+                                function (statusCode, n) {
+                                    if(statusCode) {
+                                        CallbackForNotification(statusCode, null); // fail
+                                    } else {
+                                        CallbackForNotification(null); // success
+                                    }
+                                }
+                            ); // End of async.whilist
+                        } else { // if not...
+                            CallbackForNotification(null);
+                        }
+                    },
+
+                    // Container, contentInstance registration
+                    function(CallbackForNotification) {
+                        var containerName = attributeKeys[attrCount];
+                        var contentInstanceValue = '';
+
+                        var findingLocationType = attributeOrigin[attributeKeys[attrCount]].type;
+
+                        if(findingLocationType == 'geo:json') {
+                            var Location = attributeOrigin[attributeKeys[attrCount]].value;
+                            var coordinates = Location.coordinates;
+                            contentInstanceValue = coordinates[0] + ":" + coordinates[1];
+                        } else {
+                            contentInstanceValue = attributeOrigin[attributeKeys[attrCount]].value; // contentInstance value
+                        }
+
+                        contentInstanceRegistration.contentInstanceRegistrationExecution(AEName, containerName, null, contentInstanceValue, function (statusCode) {
+                            if(statusCode == 201) {
+                                CallbackForNotification(null);
+                            } else {
+                                CallbackForNotification(statusCode);
+                            }
+                        });
                     }
-                });
+                ], function (statusCode, result) { // response to client such as web or postman
+                    if(statusCode) {
+                        async_for_loop_callback(statusCode); // fail
+                    } else {
+                        attrCount++; async_for_loop_callback();
+                    }
+                }); // End of async.waterfall
             } else {
-                count++; async_for_loop_callback(null, count);
+                attrCount++; async_for_loop_callback();
             }
         },
         function (statusCode, n) {
@@ -209,7 +268,7 @@ var fiwareDeviceUpdateForOneM2M = function(fiwareInformation, oneM2MControllerCa
                 oneM2MControllerCallback(true, 201);
             }
         }
-    );
+    ); // End of async.whilist
 };
 
 exports.registrationAE = function(count, fiwareInformation, oneM2MControllerCallback) {

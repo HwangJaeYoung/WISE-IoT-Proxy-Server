@@ -148,7 +148,7 @@ var executeRegistrationConCin = function(count, fiwareInformation, oneM2MControl
                 ], function (statusCode, result) { // response to client such as web or postman
                     if(statusCode) {
                         if(statusCode == 409) { // Container Registration Conflict
-                            count++; async_for_loop_callback();
+                            attrCount++; async_for_loop_callback();
                         } else {
                             async_for_loop_callback(statusCode); // fail
                         }

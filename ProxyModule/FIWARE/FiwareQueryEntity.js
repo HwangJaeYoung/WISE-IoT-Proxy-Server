@@ -12,6 +12,7 @@ var gettingDeviceInfo = function (EntityName, EntityType, fiwareCallback) {
     // Request for getting fiware device information from ContextBroker (Query Entity)
     requestToAnotherServer( { url : targetURL,
         method : 'GET',
+        strictSSL: false,
         headers : {
             'Accept' : 'application/json'
         }

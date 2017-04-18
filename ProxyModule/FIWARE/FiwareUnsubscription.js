@@ -12,6 +12,7 @@ var unsubscriptionFiwareDevice = function (subscriptionID, fiwareCallback) {
     // Unsubscribing fiware devices
     requestToAnotherServer( { url : targetURL,
         method : 'DELETE',
+        strictSSL: false,
         headers : {
             'Accept' : 'application/json'
         },

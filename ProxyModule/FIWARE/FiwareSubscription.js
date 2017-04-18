@@ -14,6 +14,7 @@ var subscriptionFiwareDevice = function (device, fiwareCallback) {
     // Request for subscribing fiware device information from ContextBroker (Subscription Entity)
     requestToAnotherServer( { url : targetURL,
         method : 'POST',
+        strictSSL: false,
         json: true,
         headers : {
             'Accept' : 'application/json',

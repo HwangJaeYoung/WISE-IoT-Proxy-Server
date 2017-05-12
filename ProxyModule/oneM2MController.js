@@ -18,6 +18,7 @@ var executeRegistrationAE = function(count, fiwareInformation, oneM2MControllerC
     var AEName = deviceInfo[Object.keys(deviceInfo)[count]].entityName + ":" + deviceInfo[Object.keys(deviceInfo)[count]].entityType;
 
     AERegistration.CallAERegistrationFunction(AEName, function (statusCode) {
+
         if(statusCode == 201)
             oneM2MControllerCallback(true, statusCode);
         else

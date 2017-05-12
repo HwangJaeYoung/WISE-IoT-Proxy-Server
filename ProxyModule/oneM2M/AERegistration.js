@@ -11,6 +11,8 @@ var RegistrationExecution = function (AEName, callBackForResponse) {
     var bodyObject = bodyGenerator.AEBodyGenerator(AEName);
     var targetURL = yellowTurtleIP + '/mobius-yt';
 
+    console.log(bodyObject);
+
     requestToAnotherServer({
         url: targetURL,
         method: 'POST',
@@ -24,6 +26,8 @@ var RegistrationExecution = function (AEName, callBackForResponse) {
         body: bodyObject
     }, function (error, oneM2MResponse, body) {
         if(typeof(oneM2MResponse) !== 'undefined') {
+            console.log("Status code" + oneM2MResponse.statusCode);
+            console.log(error);
 
             var statusCode = oneM2MResponse.statusCode;
 

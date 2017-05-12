@@ -2,10 +2,10 @@
   "proxy:conf": {
     "fiwareService": "egmsmartcity",
     "fiwareServicePath": "/egmsmartcitypath",
-    "fiwareIP": "http://192.168.214.128:1026",
-    "yellowTurtleIP" : "http://203.253.128.151:7579",
+    "fiwareIP": "http://192.168.0.76:1026",
+    "yellowTurtleIP" : "http://127.0.0.1:7579",
     "proxyIP" : "http://52.192.180.105",
     "proxyPort" : "62590",
-    "notificationURL" : "http://192.168.35.231:62590/FiwareNotificationEndpoint"
+    "notificationURL" : "http://192.168.0.58:62590/FiwareNotificationEndpoint"
   }
 }

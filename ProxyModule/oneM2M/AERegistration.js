@@ -11,8 +11,6 @@ var RegistrationExecution = function (AEName, callBackForResponse) {
     var bodyObject = bodyGenerator.AEBodyGenerator(AEName);
     var targetURL = yellowTurtleIP + '/mobius-yt';
 
-    console.log(bodyObject);
-
     requestToAnotherServer({
         url: targetURL,
         method: 'POST',

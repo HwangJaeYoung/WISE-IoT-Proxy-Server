@@ -11,6 +11,7 @@ var bodyParser = require('body-parser');
 var fiwareController = require('./ProxyModule/FiwareController');
 var oneM2MController = require('./ProxyModule/oneM2MController');
 var statusCodeMessage = require('./ETC/StatusCode');
+var os = require('os');
 
 // UpperTester
 var upperTesterAgent = require('./UpperTester/UpperTesterApp');
@@ -90,6 +91,13 @@ app.post('/MMGDeviceInfoEndpoint', function(request, response) {
     var selectedDevices = request.body['FiwareDevices']; // Root
     var deviceInfo = selectedDevices.deviceInfo;
     var deviceCount = Object.keys(deviceInfo).length;
+
+    // Changing ContextBrokerIP and oneM2M ServerIP
+    if(selectedDevices.fiwareIPAddr)
+        fiwareIP = selectedDevices.fiwareIPAddr;
+
+    if(selectedDevices.mobiusServerAddr)
+        yellowTurtleIP = selectedDevices.mobiusServerAddr;
 
     var fiwareDeviceInfo = new Entity( ); // Device information container
 
@@ -204,6 +212,22 @@ app.get('/', function (request, response) {
 });
 
 var serverStartFunction = function( ) {
+
+    // Local IP Address parsing code
+    var interfaces = os.networkInterfaces();
+    var addresses = [];
+    for (var k in interfaces) {
+        for (var j in interfaces[k]) {
+            var address = interfaces[k][j];
+            if (address.family === 'IPv4' && !address.internal) {
+                addresses.push(address.address);
+            }
+        }
+    }
+
+    // Setting notification url for receiving notification messages from ContextBroker
+    notificationURL = 'http://' + addresses[2] + ':62590' + '/FiwareNotificationEndpoint';
+
     // Server start!!
     app.listen(62590, function () {
         console.log('Server running at http://127.0.0.1:62590');

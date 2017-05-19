@@ -12,11 +12,8 @@ var fiwareController = require('./ProxyModule/FiwareController');
 var oneM2MController = require('./ProxyModule/oneM2MController');
 var statusCodeMessage = require('./ETC/StatusCode');
 var os = require('os');
-
-// UpperTester
-var upperTesterAgent = require('./UpperTester/UpperTesterApp');
-
 var app = express();
+
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended:false}));
 
@@ -232,8 +229,6 @@ var serverStartFunction = function( ) {
     app.listen(62590, function () {
         console.log('Server running at http://127.0.0.1:62590');
     });
-
-    upperTesterAgent.upperTesterStart(app);
 };
 
 // Entity Container

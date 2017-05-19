@@ -44,7 +44,7 @@ var subscriptionBodyGenerator = function (device) {
     bodyObject['description'] = "Fiware Device Subscription for oneM2M";
 
     /****************** Subject object generation ******************/
-    // Subject Root
+        // Subject Root
     var subjectObjectsRoot = new Object();
     var entitiesArray = new Array();
 
@@ -70,7 +70,7 @@ var subscriptionBodyGenerator = function (device) {
     bodyObject['subject'] = subjectObjectsRoot;
 
     /****************** Notification object generation ******************/
-    // Making notification information
+        // Making notification information
     var notification = new Object();
 
     // Notification http

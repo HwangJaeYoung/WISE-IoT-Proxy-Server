@@ -14,6 +14,9 @@ var statusCodeMessage = require('./ETC/StatusCode');
 var os = require('os');
 var app = express();
 
+// UpperTester
+var upperTesterAgent = require('./UpperTester/UpperTesterApp');
+
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended:false}));
 
@@ -229,6 +232,8 @@ var serverStartFunction = function( ) {
     app.listen(62590, function () {
         console.log('Server running at http://127.0.0.1:62590');
     });
+
+    upperTesterAgent.upperTesterStart(app); // testing code
 };
 
 // Entity Container
